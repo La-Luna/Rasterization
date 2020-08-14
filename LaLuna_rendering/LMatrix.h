@@ -14,6 +14,6 @@ public:
 		float a8, float a9, float a10, float a11,//col3
 		float a12, float a13, float a14, float a15//col4
 		);
-
+	LVector4 operator*(const LVector4& temp)const;
 };
 #endif

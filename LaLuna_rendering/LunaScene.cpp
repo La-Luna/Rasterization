@@ -46,15 +46,20 @@ void LunaScene::makeSimpleTriangle(){
 	m_mesh->mesh_pointscolorlist = temp_triangleColor;
 }
 void LunaScene::transformVertixes(){
-	
-
-
 	 
+	//use MVP to change the vetices properties
+
+
 	//use viewport matrix change the vertexes coordinates
+	
+	int vertices_num = m_mesh->mesh_pointscolorlist.size();
+	for (int i = 0; i < vertices_num;i++){
+		//first to NDC
 
-	//for (){
+		//and then to viewport coordinates
+		m_mesh->mesh_positionlist[i]=m_viewportMat
 
-	//}
+	}
 
 }
 void LunaScene::calculateViewportMatrix(LVector4 viewport){
@@ -63,9 +68,11 @@ void LunaScene::calculateViewportMatrix(LVector4 viewport){
 	float w = viewport.c;
 	float h = viewport.d;
 	LMatrix4 temp(
-		
-
-		)
-	m_viewportMat
+		w / 2.0, 0.0, 0.0, 0.0,//col1
+		0, h / 2.0, 0.0, 0.0,//col2
+		0.0, 0.0, 0.5, 0.0,//col3
+		wb + w / 2.0, hb + h / 2.0, 0.5, 1.0//col4
+		);
+		m_viewportMat = temp;
 
 }
