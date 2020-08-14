@@ -1,0 +1,20 @@
+﻿Build started 2020/8/14 21:32:27.
+     1>Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LMatrix.cpp LaLuna_rendering.cpp LunaScene.cpp
+         LunaScene.cpp
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.h(11): error C2512: 'LMatrix4' : no appropriate default constructor available
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(64): error C2143: syntax error : missing ';' before '}'
+         LMatrix.cpp
+         Generating Code...
+         Compiling...
+         LaLuna_rendering.cpp
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.h(11): error C2512: 'LMatrix4' : no appropriate default constructor available
+     1>d:\c++learning\laluna_rendering\laluna_rendering\laluna_rendering.cpp(109): warning C4244: 'argument' : conversion from 'const float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\laluna_rendering.cpp(128): warning C4244: 'argument' : conversion from 'LONG' to 'float', possible loss of data
+         Generating Code...
+     1>Done Building Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.11
