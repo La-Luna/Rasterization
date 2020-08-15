@@ -179,7 +179,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//double render buffer?
 
 		//rasteration
-		scene->softRasterization();
+		scene->softRasterization(hdc);
 
 
 		EndPaint(hWnd, &ps);

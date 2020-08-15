@@ -82,8 +82,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="funcs.h" />
     <ClInclude Include="LMatrix.h" />
     <ClInclude Include="LMesh.h" />
+    <ClInclude Include="LTriangle.h" />
     <ClInclude Include="LunaScene.h" />
     <ClInclude Include="LVector.h" />
     <ClInclude Include="LVert.h" />
@@ -94,6 +96,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="funcs.cpp" />
     <ClCompile Include="LaLuna_rendering.cpp" />
     <ClCompile Include="LMatrix.cpp" />
     <ClCompile Include="LMesh.cpp" />

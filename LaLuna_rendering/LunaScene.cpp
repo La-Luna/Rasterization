@@ -8,18 +8,125 @@ void LunaScene::init(LVector4 viewport){
 
 	//create mesh
 	m_mesh = new LMesh();
-
+	transformed_mesh = new LMesh();
 	makeSimpleTriangle();
 
 }
-void LunaScene::softRasterization(){
+void LunaScene::softRasterization(HDC hdc){
+
+	*transformed_mesh = *m_mesh;
 	//transforn vertixes coordinates to viewport coordinates
 	transformVertixes();
 
 
 	//raster the triangle
+	//actually the model consists of many triangles,now we only try to render one of them. 
+	int nums_triangles = transformed_mesh->mesh_triangleslist.size();
+	for (int i = 0; i < nums_triangles; i++){
+		LTriangle & IDtri = transformed_mesh->mesh_triangleslist[i];
+		int v0ID = IDtri.array[0];
+		int v1ID = IDtri.array[1];
+		int v2ID = IDtri.array[2];
+		LVert v0=transformed_mesh->getVert(v0ID);
+		LVert v1=transformed_mesh->getVert(v1ID);
+		LVert v2=transformed_mesh->getVert(v2ID);
+		fillTriangleSolid(hdc,v0,v1,v2);
+	}
+
+}
+void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2){
+		//cull back face
 
 
+		//judge the triangle:panbottom,pantop,nonpan
+
+	vector<LVert> vlist;
+	vlist.push_back(v0);
+	vlist.push_back(v1);
+	vlist.push_back(v2);
+	vector<int> high2low;
+	high2low = sortfromHigh2Low(v0.position.b,v1.position.b,v2.position.b);
+	int high = high2low[0];
+	int middle = high2low[1];
+	int low = high2low[2];
+
+	bool is_pan_top_tri = false;
+	bool is_pan_bottom_tri = false;
+	if (vlist[high].position.b == vlist[middle].position.b)is_pan_top_tri = true;
+	if (vlist[middle].position.b == vlist[low].position.b)is_pan_bottom_tri = true;
+	if (is_pan_bottom_tri&&is_pan_top_tri){}
+	else if (is_pan_bottom_tri&&!is_pan_top_tri){
+		if (vlist[middle].position.a == vlist[low].position.a){}
+		else if (vlist[middle].position.a < vlist[low].position.a)fillPanBottomTri_solid(hdc, vlist[high], vlist[middle], vlist[low]);
+		else fillPanBottomTri_solid(hdc, vlist[high], vlist[low], vlist[middle]);
+	}
+	else if (is_pan_top_tri&&!is_pan_bottom_tri){
+		if (vlist[high].position.a == vlist[middle].color.a){}
+		else if (vlist[high].position.a < vlist[middle].position.a)fillPanTopTri_solid(hdc, vlist[high], vlist[low], vlist[middle]);
+		else fillPanTopTri_solid(hdc, vlist[middle], vlist[low], vlist[high]);
+
+	}
+	else if (!is_pan_bottom_tri&&!is_pan_top_tri){
+
+		LVert middle_2 = calculateMiddle2inTri(vlist[high], vlist[low],vlist[middle].position.b);
+
+		// 3 points in a same line
+		if (middle_2.position.a = vlist[middle].position.a){}
+
+		//calculate the last cross points ,and do both fillPanTop() and fillPanBottom() 
+		else if (middle_2.position.a < vlist[middle].position.a){
+			fillPanBottomTri_solid(hdc, vlist[high], middle_2, vlist[middle]);
+			fillPanTopTri_solid(hdc, middle_2, vlist[low], vlist[middle]);
+		}
+		else{
+			fillPanBottomTri_solid(hdc, vlist[high], vlist[middle], middle_2);
+			fillPanTopTri_solid(hdc, vlist[middle], vlist[low], middle_2);
+		}
+
+	}
+
+
+}
+void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bottom_left, const LVert& bottom_right){
+
+	float yTop = top.position.b;
+	float yBottom = bottom_left.position.b;
+
+	int yTopInt = ceil(yTop - 1.5);
+	int yBottomInt = ceil(yBottom - 0.5);
+
+
+	double left_dx = ((double)top.position.a - (double)bottom_left.position.a) / ((double)top.position.b - (double)bottom_left.position.b);
+	double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b - (double)top.position.b - (double)bottom_right.position.b);
+
+	double left_x = lineInsertWithHorizontalLine(top.position, bottom_left.position, yBottom + 0.5);
+	double right_x = lineInsertWithHorizontalLine(top.position, bottom_right.position, yBottom + 0.5);
+
+
+	for (int i = yBottomInt; i < yTopInt; i++){
+		int xLeftInt = ceil(left_x - 0.5);
+		int xRightInt = ceil(right_x - 1.5);
+		for (int j = xLeftInt; j <= xRightInt; j++){
+			//zbuffer?
+
+			drawPixel()
+
+		}
+		left_x = left_x + left_dx;
+		right_x = right_x + right_dx;
+
+	}
+
+
+}
+void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& low, const LVert& top_right){
+
+}
+void LunaScene::drawPixel(HDC hdc, float x, float y, LVector4 color){
+	int r_clamp = max(0, min(1, color.a)) * 255;
+	int g_clamp = max(0, min(1, color.b)) * 255;
+	int b_clamp = max(0, min(1, color.c)) * 255;
+	SetPixel(hdc, x, m_viewport.d - y, RGB(r_clamp, g_clamp, b_clamp));
 }
 void LunaScene::makeSimpleTriangle(){
 	//set m_mesh
@@ -45,19 +152,20 @@ void LunaScene::makeSimpleTriangle(){
 	m_mesh->mesh_positionlist = temp_trianglePoints;
 	m_mesh->mesh_pointscolorlist = temp_triangleColor;
 }
+//3 float nums
+
 void LunaScene::transformVertixes(){
 	 
 	//use MVP to change the vetices properties
 
 
 	//use viewport matrix change the vertexes coordinates
-	
-	int vertices_num = m_mesh->mesh_pointscolorlist.size();
+	int vertices_num = transformed_mesh->mesh_positionlist.size();
 	for (int i = 0; i < vertices_num;i++){
 		//first to NDC
 
 		//and then to viewport coordinates
-		m_mesh->mesh_positionlist[i]=m_viewportMat
+		transformed_mesh->mesh_positionlist[i] = m_viewportMat*transformed_mesh->mesh_positionlist[i];
 
 	}
 
