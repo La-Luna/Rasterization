@@ -6,3 +6,6 @@ LVert LMesh::getVert(int ID){
 	v.color = mesh_pointscolorlist[ID];
 	return v;
 }
+LMesh::LMesh(const LMesh& tm){
+
+}

@@ -11,7 +11,8 @@ class LMesh{
 
 public:
 	LMesh(){};
-	~LMesh();
+	LMesh(const LMesh& tm);
+	~LMesh(){};
 
 
 

@@ -96,12 +96,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="funcs.cpp" />
     <ClCompile Include="LaLuna_rendering.cpp" />
     <ClCompile Include="LMatrix.cpp" />
     <ClCompile Include="LMesh.cpp" />
     <ClCompile Include="LunaScene.cpp" />
     <ClCompile Include="LVector.cpp" />
+    <ClCompile Include="LVert.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

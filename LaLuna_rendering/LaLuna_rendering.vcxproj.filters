@@ -74,7 +74,7 @@
     <ClCompile Include="LMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="funcs.cpp">
+    <ClCompile Include="LVert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,3 +12,12 @@ LVector4::LVector4(float a0, float b0, float c0, float d0){
 	array[2] = c0;
 	array[3] = d0;
 }
+LVector4::LVector4(const LVector4& v){
+	a = v.a;
+	b = v.b;
+	c = v.c;
+	d = v.d;
+	for (int i = 0; i < 4; i++){
+		array[i] = v.array[i];
+	}
+}

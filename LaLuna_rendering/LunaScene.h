@@ -4,13 +4,18 @@
 #include"LMesh.h"
 #include "LMatrix.h"
 #include "LVert.h"
-#include "funcs.h"
+
 #include"LVector.h"
 class LunaScene;
 extern LunaScene* scene;
 class LunaScene{
 public:
-	LunaScene(){}
+	LunaScene(){
+		m_mesh = NULL;
+		transformed_mesh = NULL;
+
+	}
+	~LunaScene();
 private:
 public:
 	//mesh
@@ -30,7 +35,7 @@ public:
 	void softRasterization(HDC hdc);
 	void fillTriangleSolid(HDC hdc,const LVert& v0,const LVert& v1,const LVert& v2);
 	void fillPanBottomTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2);
-	void fillPanTopTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2);
+	void fillPanTopTri_solid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2);
 
 	//draw pixel functions
 	void drawPixel(HDC hdc, float x, float y, LVector4 color);

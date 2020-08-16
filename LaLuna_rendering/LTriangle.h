@@ -8,7 +8,7 @@ public:
 	short array[3];
 
 
-}
+};
 
 
 #endif

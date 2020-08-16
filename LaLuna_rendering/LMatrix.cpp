@@ -25,10 +25,19 @@ LMatrix4::LMatrix4(const float array[16]){
 		matrix[i] = array[i];
 	}
 }
+LMatrix4::LMatrix4(const LMatrix4& tm){
+	for (int i = 0; i < 16; i++){
+		matrix[i] = tm.matrix[i];
+	}
+}
 LVector4 LMatrix4::operator*(const LVector4& temp)const{
 	LVector4 ans;
 	for (int i = 0; i < 4; i++){
 		ans.array[i]=matrix[i]*temp.a+matrix[i+4]*temp.b+matrix[i+8]*temp.c+matrix[i+12]*temp.d;
 	}
+	ans.a = ans.array[0];
+	ans.b = ans.array[1];
+	ans.c = ans.array[2];
+	ans.d = ans.array[3];
 	return ans;
 }

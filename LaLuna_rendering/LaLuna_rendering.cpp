@@ -22,12 +22,37 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-
+LunaScene* scene;
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+	//----begin yang chao
+	//----create console
+	AllocConsole();   // 建立控制台
+	SetConsoleTitle(_T("Debug Output"));      // 设置控制台窗口标题
+	// 重定向 STDIN
+	{
+		FILE*fp;
+		errno_t eno = freopen_s(&fp, "CONIN$", "r+t", stdin);
+		if (eno != 0){//不成功
+			MessageBox(NULL, _T("重定向stdin失败!"), _T("error"), MB_OK | MB_ICONEXCLAMATION);
+			exit(0);
+		}
+	}
+	// 重定向STDOUT
+	{
+		FILE*fp;
+		errno_t eno = freopen_s(&fp, "CONOUT$", "w+t", stdout);
+		if (eno != 0){//不成功
+			MessageBox(NULL, _T("重定向stdout失败!"), _T("error"), MB_OK | MB_ICONEXCLAMATION);
+			exit(0);
+		}
+
+	}
+
+	//----end yang chao
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -58,6 +83,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		}
 	}
 
+	FreeConsole();
+
 	return (int) msg.wParam;
 }
 
@@ -81,7 +108,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hInstance		= hInstance;
 	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_LALUNA_RENDERING));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+	wcex.hbrBackground = NULL;//(HBRUSH)(COLOR_WINDOW+1);
 	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_LALUNA_RENDERING);
 	wcex.lpszClassName	= szWindowClass;
 	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
@@ -126,7 +153,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
    LVector4 viewport(rect.top,rect.left,rect.bottom-rect.top,rect.right-rect.left);
-   scene = new LunaScene;
+   scene = new LunaScene();
    scene->init(viewport);
 
 
@@ -154,6 +181,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
+	static int cxClient, cyClient;
+	static HDC hdc_back_buffer;
+	static HBITMAP h_bitmap;
+	static HBITMAP h_old_bitmap;
+
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -172,20 +204,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
 		break;
+
+	case WM_CREATE:{
+		RECT rect;
+		GetClientRect(hWnd, &rect);
+		cxClient = rect.right;
+		cyClient = rect.bottom;
+
+		hdc_back_buffer = CreateCompatibleDC(NULL);
+		HDC hdc = GetDC(hWnd);
+			h_bitmap = CreateCompatibleBitmap(hdc, cxClient, cyClient);
+		h_old_bitmap = (HBITMAP)SelectObject(hdc_back_buffer, h_bitmap);
+		ReleaseDC(hWnd, hdc);
+
+		}
+		break;
 	case WM_PAINT:
+	{
 		hdc = BeginPaint(hWnd, &ps);
 		// TODO: Add any drawing code here...
-
+		BitBlt(hdc_back_buffer, 0, 0, cxClient, cyClient, NULL, NULL, NULL, BLACKNESS);
 		//double render buffer?
 
 		//rasteration
-		scene->softRasterization(hdc);
+		scene->softRasterization(hdc_back_buffer);
 
-
+		BitBlt(ps.hdc, 0, 0, cxClient, cyClient, hdc_back_buffer, 0,0, SRCCOPY);
 		EndPaint(hWnd, &ps);
-		break;
+		
+	}
+	break;
 	case WM_DESTROY:
+	{
+
+		SelectObject(hdc_back_buffer, h_old_bitmap);
+		DeleteDC(hdc_back_buffer);
+		DeleteObject(h_bitmap);
+		delete scene;
 		PostQuitMessage(0);
+	}
+
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
