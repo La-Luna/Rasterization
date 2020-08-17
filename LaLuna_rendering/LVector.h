@@ -24,5 +24,6 @@ public:
 	void setb(float v){ c = v; array[2] = v; }
 	void setalpha(float v){ d = v; array[3] = v; }
 
+	float operator*(const LVector4& a);
 };
 #endif

@@ -1,12 +1,24 @@
 #include"stdafx.h"
 #include"LunaScene.h"
+#include "LunaGLMath.h"
 #include "funcs.h"
 //LunaScene* scene = NULL;
+LVert vertexShaderPrograme(const LMatrix4& modelMat, LVert& v){
+	LVert temp_v=v;
+	temp_v.position=
+	temp_v.position = modelMat*temp_v.position;
+	return temp_v;
+
+}
 LunaScene::~LunaScene(){
 	if(m_mesh)delete m_mesh;
 	if(transformed_mesh)delete transformed_mesh;
 }
 void LunaScene::init(LVector4 viewport){
+
+	//initiate the model matrix and view matrix
+	m_modelMat = initModelMatrix();
+
 
 	//calculate the viewport matrix according to the viewport size
 	calculateViewportMatrix(viewport);
@@ -14,7 +26,8 @@ void LunaScene::init(LVector4 viewport){
 	//create mesh
 	m_mesh = new LMesh();
 	transformed_mesh = new LMesh();
-	makeSimpleTriangle();
+	//makeSimpleTriangle();
+	makeSimpleCube();
 
 }
 void LunaScene::softRasterization(HDC hdc){
@@ -194,12 +207,63 @@ void LunaScene::makeSimpleTriangle(){
 	m_mesh->mesh_positionlist = temp_trianglePoints;
 	m_mesh->mesh_pointscolorlist = temp_triangleColor;
 	m_mesh->mesh_triangleslist.push_back(tr1);
-}
-//3 float nums
 
+
+
+}
+void LunaScene::makeSimpleCube(){
+	//cube mesh;
+	vector<LVector4> temp_position_list;
+	vector<LVector4> temp_pos_color_list;
+	vector<LTriangle> temp_tri_ID_list;
+	//front face
+	{
+		temp_position_list.push_back(LVector4(0.5, 0.5, 0, 1)); int vID0 = temp_position_list.size() - 1;
+		temp_position_list.push_back(LVector4(0.5, -0.5, 0, 1)); int vID1 = temp_position_list.size() - 1;
+		temp_position_list.push_back(LVector4(-0.5, -0.5, 0, 1)); int vID2 = temp_position_list.size() - 1;
+		temp_position_list.push_back(LVector4(-0.5, 0.5, 0, 1)); int vID3 = temp_position_list.size() - 1;
+
+
+		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+
+		temp_tri_ID_list.push_back(LTriangle(0, 1, 3));
+		temp_tri_ID_list.push_back(LTriangle(1, 2, 3));
+
+	}
+	m_mesh->mesh_positionlist = temp_position_list;
+	m_mesh->mesh_pointscolorlist = temp_pos_color_list;
+	m_mesh->mesh_triangleslist = temp_tri_ID_list;
+
+
+}
+LMatrix4 LunaScene::initModelMatrix(){
+
+	LMatrix4 temp_scale_mat = calculateScaleMatrix(0.25, 0.25, 0.25);
+	LVector4 temp_trans(0.5, 0, 0, 0);
+	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
+	LVector4 rotate_axis( 1, 0,0, 1);
+	LMatrix4 temp_rotate_mat = calculateRotateMatrix(rotate_axis, 0.5, 0.86);
+	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
+	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
+	LMatrix4 temp_model_mat = temp_rotate_mat;
+	return temp_model_mat;
+	//LMatrix4 temp_mat=calculateRotateMatrix()
+}
 void LunaScene::transformVertixes(){
 	cout << "run into LunaScene::transformVertixes()" << endl;
+	//run the VertexShaderPrograme (just like in real OpenGL)
 	//use MVP to change the vetices properties
+	int vertexNum = transformed_mesh->mesh_positionlist.size();
+	for (int i = 0; i < vertexNum; i++){
+		LVert v = transformed_mesh->getVert(i);
+		LVert transformed_v = vertexShaderPrograme(m_modelMat, v);
+		//transformed_mesh->mesh_positionlist[i] = transformed_v;
+		transformed_mesh->setVert(i, transformed_v);
+	}
+
 
 
 	//use viewport matrix change the vertexes coordinates

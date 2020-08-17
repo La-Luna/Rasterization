@@ -21,3 +21,11 @@ LVector4::LVector4(const LVector4& v){
 		array[i] = v.array[i];
 	}
 }
+
+float LVector4::operator*(const LVector4& a){
+	float ans=0;
+	for (int i = 0; i < 4; i++){
+		ans += this->array[i] * a.array[i];
+	}
+	return ans;
+}

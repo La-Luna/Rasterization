@@ -24,7 +24,7 @@ public:
 
 	//get some values
 	LVert getVert(int ID);
-
+	void setVert(int i,LVert v);
 
 };
 #endif

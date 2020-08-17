@@ -9,3 +9,7 @@ LVert LMesh::getVert(int ID){
 LMesh::LMesh(const LMesh& tm){
 
 }
+void LMesh::setVert(int i,LVert v){
+	mesh_positionlist[i] = v.position;
+	mesh_pointscolorlist[i] = v.color;
+}

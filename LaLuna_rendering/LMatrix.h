@@ -18,5 +18,6 @@ public:
 
 	float matrix[16];
 	LVector4 operator*(const LVector4& temp)const;
+	LMatrix4 operator*(const LMatrix4& A)const;
 };
 #endif
