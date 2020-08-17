@@ -104,7 +104,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 
 
 	const double left_dx = ((double)top.position.a - (double)bottom_left.position.a) / ((double)top.position.b - (double)bottom_left.position.b);
-	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b - (double)top.position.b - (double)bottom_right.position.b);
+	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b  - (double)bottom_right.position.b);
 	double left_x = lineInsertWithHorizontalLine(top.position, bottom_left.position, (double)(yBottom + 0.5));
 	double right_x = lineInsertWithHorizontalLine(top.position, bottom_right.position, (double)(yBottom + 0.5));
 

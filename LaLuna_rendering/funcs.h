@@ -6,6 +6,7 @@
 #include "LVector.h"
 #include<vector>
 using namespace std;
+
 vector<int> sortfromHigh2Low(float a, float b, float c){
 	cout << "run into LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2)" << endl;
 	//012
@@ -15,8 +16,8 @@ vector<int> sortfromHigh2Low(float a, float b, float c){
 	//201
 	//210   6 types
 	vector<int> ans;
-	int max_3 = max(max(a, b), c);
-	int max_2;
+	float max_3 = max(max(a, b), c);
+	float max_2;
 	if (max_3 == a){
 		ans.push_back(0);
 		max_2 = max(b, c);

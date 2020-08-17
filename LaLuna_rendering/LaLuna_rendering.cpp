@@ -152,7 +152,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    cout << "rect right = " << rect.right << endl;
 
 
-   LVector4 viewport(rect.top,rect.left,rect.bottom-rect.top,rect.right-rect.left);
+   LVector4 viewport(rect.top, rect.left, rect.right - rect.left,rect.bottom - rect.top);//(0,0£¬width,height)
    scene = new LunaScene();
    scene->init(viewport);
 
