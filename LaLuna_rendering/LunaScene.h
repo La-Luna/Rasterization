@@ -7,7 +7,7 @@
 
 #include"LVector.h"
 
-LVert vertexShaderPrograme(const LMatrix4& modelMat,const LVert& v);
+LVert vertexShaderPrograme(const LMatrix4& modelMat,const LMatrix4&viewMat,const LMatrix4& projectionMat,const LVert& v);
 
 
 class LunaScene;
@@ -35,6 +35,8 @@ public:
 	LMatrix4 m_viewMat;
 	LMatrix4 m_projectionMat;
 	LMatrix4 initModelMatrix();
+	LMatrix4 initViewMatrix();
+	LMatrix4 initProjectionMatrix();
 	//keep updating:transform matrixis
 
 
@@ -42,6 +44,14 @@ public:
 
 
 	void calculateViewportMatrix(LVector4 viewport);
+
+	//ztest
+	double* z_test_buffer;
+	LearlyZOutput interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,const LVert&v1,const LVert&v2,float xp,float yp);
+	void initZBuffer();
+	void clearZBuffer();
+	float readZBuffer(int x_pixel, int y_pixel);
+	void writeZBuffer(int x_pixel, int y_pixel, float z_value);
 	//draw mesh fucntions
 	void init(LVector4 viewport);
 	void makeSimpleTriangle();

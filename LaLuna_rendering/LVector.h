@@ -3,6 +3,32 @@
 #include<iostream>
 #include<vector>
 using namespace std;
+class LVector2{
+public:
+	LVector2(float arr[2]){
+		array[0] = arr[0];		a = array[0];
+		array[1] = arr[1];		b = array[1];
+
+	}
+	LVector2(float t0, float t1){
+		array[0] = t0;		a = array[0];
+		array[1] = t1;		b = array[1];
+
+	}
+	LVector2(){};
+	LVector2(const LVector2& B){
+		array[0] = B.a;
+		array[1] = B.b;
+	}
+	~LVector2(){};
+	float array[2];
+	float a;
+	float b;
+
+	float getA(){ return a; }
+	float getB(){ return b; }
+};
+
 class LVector4{
 public:
 	LVector4(){};

@@ -13,4 +13,12 @@ public:
 	LVector4 color;
 };
 
+
+class LearlyZOutput{
+public:
+	float m_x, m_y, m_z;
+	float m_A, m_B;
+	LearlyZOutput(){};
+	~LearlyZOutput(){};
+};
 #endif

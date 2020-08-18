@@ -7,7 +7,12 @@ using namespace std;
 class LMatrix4{
 
 public:
-	LMatrix4(){}
+	LMatrix4(){
+		for (int i = 0; i < 16; i++){
+			if (i % 5 == 0)matrix[i] = 1;
+			else matrix[i] = 0;
+		}
+	}
 	LMatrix4(const float array[16]);
 	LMatrix4(float a0, float a1, float a2, float a3,//col 1
 		float a4, float a5, float a6, float a7,//col2
