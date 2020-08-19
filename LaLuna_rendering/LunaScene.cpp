@@ -3,10 +3,12 @@
 #include "LunaGLMath.h"
 #include "funcs.h"
 //LunaScene* scene = NULL;
-LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v){
+//, const LMatrix4&viewMat, const LMatrix4& projectionMat
+LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, const LVert& v){
 	LVert temp_v=v;
 	//temp_v.position=
 	temp_v.position = modelMat*temp_v.position;
+	//temp_v.position = viewMat*temp_v.position;
 	return temp_v;
 
 }
@@ -17,13 +19,12 @@ LunaScene::~LunaScene(){
 }
 void LunaScene::init(LVector4 viewport){
 
-	//initiate the model matrix and view matrix
-	m_modelMat = initModelMatrix();
 
 
 	//calculate the viewport matrix according to the viewport size
 	calculateViewportMatrix(viewport);
 	initZBuffer();
+	clearZBuffer();
 
 	//create mesh
 	m_mesh = new LMesh();
@@ -43,6 +44,10 @@ void LunaScene::softRasterization(HDC hdc){
 	//cout << "run into LunaScene::softRasterization(HDC hdc)" << endl;
 	//clear zBuffer
 	clearZBuffer();
+
+	//initiate the model matrix and view matrix
+	m_modelMat = initModelMatrix();
+	m_viewMat = initViewMatrix();
 
 	*transformed_mesh = *m_mesh;
 	//transforn vertixes coordinates to viewport coordinates
@@ -133,13 +138,13 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 	int yBottomInt = ceil(yBottom - 0.5);
 
 
-	const double left_dx = ((double)top.position.a - (double)bottom_left.position.a) / ((double)top.position.b - (double)bottom_left.position.b);
-	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b  - (double)bottom_right.position.b);
+	const double left_dx = ((double)top.position.a - (double)bottom_left.position.a) / ((double)top.position.b - (double)bottom_left.position.b);//+?-?+
+	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b  - (double)bottom_right.position.b);//+?+?-
 	double left_x = lineInsertWithHorizontalLine(top.position, bottom_left.position, (double)(yBottom + 0.5));
 	double right_x = lineInsertWithHorizontalLine(top.position, bottom_right.position, (double)(yBottom + 0.5));
 
 
-	for (int i = yBottomInt; i < yTopInt; i++){
+	for (int i = yBottomInt; i <= yTopInt; i++){
 
 		int xLeftInt = ceil(left_x - 0.5);
 		int xRightInt = ceil(right_x - 1.5);
@@ -150,7 +155,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(top, bottom_left, bottom_right, pixelCenter.a, pixelCenter.b);
 			float zvalue_inbuffer = readZBuffer(j,i);
 			//cout << " zvalue_inbuffer" << zvalue_inbuffer << "/tearlyZoutput.m_z" << earlyZoutput.m_z << endl;
-			if (earlyZoutput.m_z>=zvalue_inbuffer){
+			if (earlyZoutput.m_z>zvalue_inbuffer){
 			//fragment process
 			LVector4 cur_color = top.color;
 			drawPixel(hdc, j, i, cur_color);
@@ -172,8 +177,8 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 	int yTopInt = ceil(yTop - 1.5);
 	int yBottomInt = ceil(tBottom - 0.5);
 
-	const double left_dx = ((double)low.position.a - (double)top_left.position.a) / ((double)top_left.position.b - (double)low.position.b);
-	const double right_dx = ((double)top_right.position.a - (double)low.position.a) / ((double)top_right.position.b - (double)low.position.b);
+	const double left_dx = ((double)low.position.a - (double)top_left.position.a) / ((double)top_left.position.b - (double)low.position.b);//+?-?+
+	const double right_dx = ((double)top_right.position.a - (double)low.position.a) / ((double)top_right.position.b - (double)low.position.b);//+?+?-
 	double left_x = lineInsertWithHorizontalLine(top_left.position, low.position, (double)(yTop + 0.5));
 	double right_x = lineInsertWithHorizontalLine(top_right.position, low.position, (double)(yTop + 0.5));
 
@@ -187,7 +192,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 			LVector2 pixelCenter = LVector2(xInt + 0.5, yInt + 0.5);
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low,top_left, top_right, pixelCenter.a, pixelCenter.b);
 			float zvalue_inbuffer = readZBuffer(xInt, yInt);
-			if (earlyZoutput.m_z >= zvalue_inbuffer){
+			if (earlyZoutput.m_z > zvalue_inbuffer){
 
 				LVector4 cur_color = top_left.color;
 				drawPixel(hdc, xInt, yInt, cur_color);
@@ -321,10 +326,10 @@ void LunaScene::makeSimpleCube(){
 	}
 	//up face
 	{
-		temp_position_list.push_back(LVector4(0.5, 0.5, 0.5, 1)); int vID0 = temp_position_list.size() - 1;//16
-		temp_position_list.push_back(LVector4(0.5, 0.5, -0.5, 1)); int vID1 = temp_position_list.size() - 1;//17
-		temp_position_list.push_back(LVector4(-0.5, 0.5, -0.5, 1)); int vID2 = temp_position_list.size() - 1;//18
-		temp_position_list.push_back(LVector4(-0.5, 0.5, 0.5, 1)); int vID3 = temp_position_list.size() - 1;//19
+		temp_position_list.push_back(LVector4(0.5, 0.5, -0.5, 1)); int vID0 = temp_position_list.size() - 1;//16
+		temp_position_list.push_back(LVector4(0.5, 0.5, 0.5, 1)); int vID1 = temp_position_list.size() - 1;//17
+		temp_position_list.push_back(LVector4(-0.5, 0.5, 0.5, 1)); int vID2 = temp_position_list.size() - 1;//18
+		temp_position_list.push_back(LVector4(-0.5, 0.5, -0.5, 1)); int vID3 = temp_position_list.size() - 1;//19
 
 
 		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
@@ -338,10 +343,10 @@ void LunaScene::makeSimpleCube(){
 	}
 	//down face
 	{
-		temp_position_list.push_back(LVector4(0.5, -0.5, 0.5, 1)); int vID0 = temp_position_list.size() - 1;//20
-		temp_position_list.push_back(LVector4(0.5, -0.5, -0.5, 1)); int vID1 = temp_position_list.size() - 1;//21
-		temp_position_list.push_back(LVector4(-0.5, -0.5, -0.5, 1)); int vID2 = temp_position_list.size() - 1;//22
-		temp_position_list.push_back(LVector4(-0.5, -0.5, 0.5, 1)); int vID3 = temp_position_list.size() - 1;//23
+		temp_position_list.push_back(LVector4(0.5, -0.5, -0.5, 1)); int vID0 = temp_position_list.size() - 1;//20
+		temp_position_list.push_back(LVector4(0.5, -0.5, 0.5, 1)); int vID1 = temp_position_list.size() - 1;//21
+		temp_position_list.push_back(LVector4(-0.5, -0.5, 0.5, 1)); int vID2 = temp_position_list.size() - 1;//22
+		temp_position_list.push_back(LVector4(-0.5, -0.5, -0.5, 1)); int vID3 = temp_position_list.size() - 1;//23
 
 
 		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
@@ -365,22 +370,36 @@ LMatrix4 LunaScene::initModelMatrix(){
 	LVector4 temp_trans(0.5, 0, 0, 0);
 	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
 	LVector4 rotate_axis(0, 1, 0, 1);
-	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
-	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.707, 0.707);
+	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
+	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.707, 0.707);
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
-	temp_model_mat = temp_rotate_mat2*temp_rotate_mat1;
+	temp_model_mat = temp_rotate_mat1*temp_rotate_mat2;
 	return temp_model_mat;
 	//LMatrix4 temp_mat=calculateRotateMatrix()
 
 }
 LMatrix4 LunaScene::initViewMatrix(){
-	m_viewportMat
+	LMatrix4 temp_view_mr(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, -1, 0,
+		0, 0, 0, 1
+		);
+	LMatrix4 temp_view_mt(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, -0.5, 1
+		);
+	LMatrix4 temp_viewm=temp_view_mr*temp_view_mt;
+	m_viewMat = temp_viewm;
+	return m_viewMat;
 }
-LMatrix4 LunaScene::initProjectionMatrix(){
-
-}
+//LMatrix4 LunaScene::initProjectionMatrix(){
+//	  
+//}
 void LunaScene::transformVertixes(){
 	//cout << "run into LunaScene::transformVertixes()" << endl;
 	//run the VertexShaderPrograme (just like in real OpenGL)
@@ -388,7 +407,7 @@ void LunaScene::transformVertixes(){
 	int vertexNum = transformed_mesh->mesh_positionlist.size();
 	for (int i = 0; i < vertexNum; i++){
 		LVert v = transformed_mesh->getVert(i);
-		LVert transformed_v = vertexShaderPrograme(m_modelMat, v);
+		LVert transformed_v = vertexShaderPrograme(m_modelMat,m_viewMat, v);
 		//transformed_mesh->mesh_positionlist[i] = transformed_v;
 		transformed_mesh->setVert(i, transformed_v);
 	}
@@ -432,6 +451,9 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 	const float x2 = v2.position.array[0];
 	const float y2 = v2.position.array[1];
 	const float z2 = v2.position.array[2];
+	/*if (z0<0 || z1<0 || z2<0)
+	{ cout << "test z value:" << z0 << "/t" << z1 << "/t" << z2 << endl; }*/
+
 	const float y1suby0 = y1 - y0;
 	const float y2suby0 = y2 - y0;
 	const float ysuby0 = y - y0;
@@ -458,6 +480,7 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 	earlyZOutput.m_x = x;
 	earlyZOutput.m_y = y;
 	earlyZOutput.m_z = z;
+	//if (z!=0.75&&z!=0.25)cout <<  "\tearlyZoutput.m_z" << z << endl;
 	return earlyZOutput;
 }
 float LunaScene::readZBuffer(int x_pixel, int y_pixel){

@@ -6,8 +6,8 @@
 #include "LVert.h"
 
 #include"LVector.h"
-
-LVert vertexShaderPrograme(const LMatrix4& modelMat,const LMatrix4&viewMat,const LMatrix4& projectionMat,const LVert& v);
+//, const LMatrix4&viewMat, const LMatrix4& projectionMat
+LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, const LVert& v);
 
 
 class LunaScene;
@@ -36,7 +36,7 @@ public:
 	LMatrix4 m_projectionMat;
 	LMatrix4 initModelMatrix();
 	LMatrix4 initViewMatrix();
-	LMatrix4 initProjectionMatrix();
+	//LMatrix4 initProjectionMatrix();
 	//keep updating:transform matrixis
 
 
