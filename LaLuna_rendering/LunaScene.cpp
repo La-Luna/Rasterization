@@ -8,7 +8,7 @@ LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, con
 	LVert temp_v=v;
 	//temp_v.position=
 	temp_v.position = modelMat*temp_v.position;
-	//temp_v.position = viewMat*temp_v.position;
+	temp_v.position = viewMat*temp_v.position;
 	return temp_v;
 
 }
@@ -111,7 +111,7 @@ void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, con
 	else if (!is_pan_bottom_tri&&!is_pan_top_tri){
 
 		LVert middle_2 = calculateMiddle2inTri(vlist[high], vlist[low],vlist[middle].position.b);
-
+		middle_2 = interpolate_inViewportSpace(vlist[high], vlist[low], middle_2.position.a, middle_2.position.b);
 		// 3 points in a same line
 		if (middle_2.position.a == vlist[middle].position.a){}
 
@@ -190,7 +190,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 
 			//zbuffer test
 			LVector2 pixelCenter = LVector2(xInt + 0.5, yInt + 0.5);
-			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low,top_left, top_right, pixelCenter.a, pixelCenter.b);
+			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low, top_left,top_right, pixelCenter.a, pixelCenter.b);
 			float zvalue_inbuffer = readZBuffer(xInt, yInt);
 			if (earlyZoutput.m_z > zvalue_inbuffer){
 
@@ -275,6 +275,7 @@ void LunaScene::makeSimpleCube(){
 	}
 	//back face
 	{
+
 		temp_position_list.push_back(LVector4(0.5, 0.5, -0.5, 1)); int vID0 = temp_position_list.size() - 1;//4
 		temp_position_list.push_back(LVector4(0.5, -0.5, -0.5, 1)); int vID1 = temp_position_list.size() - 1;//5
 		temp_position_list.push_back(LVector4(-0.5, -0.5, -0.5, 1)); int vID2 = temp_position_list.size() - 1;//6
@@ -292,6 +293,7 @@ void LunaScene::makeSimpleCube(){
 	}
 	//right face
 	{
+
 		temp_position_list.push_back(LVector4(0.5, 0.5, -0.5, 1)); int vID0 = temp_position_list.size() - 1;//8
 		temp_position_list.push_back(LVector4(0.5, -0.5, -0.5, 1)); int vID1 = temp_position_list.size() - 1;//9
 		temp_position_list.push_back(LVector4(0.5, -0.5, 0.5, 1)); int vID2 = temp_position_list.size() - 1;//10
@@ -369,9 +371,9 @@ LMatrix4 LunaScene::initModelMatrix(){
 	LMatrix4 temp_scale_mat = calculateScaleMatrix(0.25, 0.25, 0.25);
 	LVector4 temp_trans(0.5, 0, 0, 0);
 	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
-	LVector4 rotate_axis(0, 1, 0, 1);
+	LVector4 rotate_axis(0, -1, 0, 1);
 	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
-	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.707, 0.707);
+	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1,0,0, 1), 0.707, 0.707);
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
@@ -384,7 +386,7 @@ LMatrix4 LunaScene::initViewMatrix(){
 	LMatrix4 temp_view_mr(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
-		0, 0, -1, 0,
+		0, 0, 1, 0,
 		0, 0, 0, 1
 		);
 	LMatrix4 temp_view_mt(
@@ -474,16 +476,63 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 		z = z0 + (z1 - z0)*A + (z2 - z0)*B;
 
 	}
-	LearlyZOutput earlyZOutput;
-	earlyZOutput.m_A = A;
-	earlyZOutput.m_B = B;
-	earlyZOutput.m_x = x;
-	earlyZOutput.m_y = y;
-	earlyZOutput.m_z = z;
-	//if (z!=0.75&&z!=0.25)cout <<  "\tearlyZoutput.m_z" << z << endl;
-	return earlyZOutput;
+	LearlyZOutput earlyZOutput1;
+	earlyZOutput1.m_A = A;
+	earlyZOutput1.m_B = B;
+	earlyZOutput1.m_x = x;
+	earlyZOutput1.m_y = y;
+	earlyZOutput1.m_z = z;
+
+	return earlyZOutput1;
+
+
+
+	//const float xa = v0.position.array[0];
+	//const float ya = v0.position.array[1];
+	//const float za = v0.position.array[2];
+
+	//const float xb = v1.position.array[0];
+	//const float yb = v1.position.array[1];
+	//const float zb = v1.position.array[2];
+
+	//const float xc = v2.position.array[0];
+	//const float yc = v2.position.array[1];
+	//const float zc = v2.position.array[2];
+
+
+	//float x_xb = x - xb;
+	//float yc_yb = yc - yb;
+	//float y_yb = y - yb;
+	//float xa_xb = xa - xb;
+	//float ya_yb = ya - yb;
+	//float xc_xb = xc - xb;
+	//float x_xc = x - xc;
+	//float y_yc = y - yc;
+	//float xb_xc = xb - xc;
+	//float ya_yc = ya - yc;
+	//float yb_yc = yb - yc;
+	//float xa_xc = xa - xc;
+
+	//float myalpha, mybeta, mygamma;
+	//myalpha = (y_yb*xc_xb - x_xb*yc_yb) / (ya_yb*xc_xb - xa_xb*yc_yb);
+	//mybeta = (y_yc*xa_xc - x_xc*ya_yc) / (yb_yc*xa_xc - xb_xc*ya_yc);
+
+	//mygamma = 1 - myalpha - mybeta;
+
+	//float des_z = myalpha*za + mybeta*zb + mygamma*zc;
+	////if(des_z<0||des_z>1)cout << "des_z"<<des_z << endl;
+	//LearlyZOutput ans;
+	//ans.m_x = x;
+	//ans.m_y = y;
+	//ans.m_z = des_z;
+	//ans.m_A = myalpha;
+	//ans.m_B = mybeta;
+
+	//cout << "syl.z yc.z:" << earlyZOutput1.m_z <<"   "<< ans.m_z << endl;
+	//return ans;
+
 }
-float LunaScene::readZBuffer(int x_pixel, int y_pixel){
+double LunaScene::readZBuffer(int x_pixel, int y_pixel){
 	int screen_width = (int)m_viewport.c;
 	int screen_height = (int)m_viewport.d;
 	if (x_pixel >= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
@@ -491,11 +540,40 @@ float LunaScene::readZBuffer(int x_pixel, int y_pixel){
 	}
 	return -1;//just  a test!
 }
-void LunaScene::writeZBuffer(int x_pixel, int y_pixel, float z_value){
+void LunaScene::writeZBuffer(int x_pixel, int y_pixel, double z_value){
 	int screen_width = (int)m_viewport.c;
 	int screen_height = (int)m_viewport.d;
 	if (x_pixel >= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
 		z_test_buffer[x_pixel*screen_width + y_pixel]=z_value;
 	}
+
+}
+LVert LunaScene::interpolate_inViewportSpace(const LVert& v1, const LVert&v2, float x, float y){
+	//in viewportspace calculate some important value base on the triangle figures
+	const float x1 = v1.position.a;
+	const float y1 = v1.position.b;
+	const float z1 = v1.position.c;
+
+	const float x2 = v2.position.a;
+	const float y2 = v2.position.b;
+	const float z2 = v2.position.c;
+
+	const float dx = x1 - x2;
+	const float dy = y1 - y2;
+	float k;
+
+	if (abs(dx) < abs(dy)){
+		k = (y - y2) / dy;
+	}
+	else{
+		k = (x - x2) / dx;
+	}
+
+	float des_z = k*(z1 - z2) + z2;
+
+	LVert v = v1;
+	v.position = LVector4(x, y, des_z, v1.position.d);
+
+	return v;
 
 }

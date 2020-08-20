@@ -44,14 +44,14 @@ public:
 
 
 	void calculateViewportMatrix(LVector4 viewport);
-
+	LVert interpolate_inViewportSpace(const LVert& v1, const LVert&v2, float x, float y);
 	//ztest
 	double* z_test_buffer;
 	LearlyZOutput interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,const LVert&v1,const LVert&v2,float xp,float yp);
 	void initZBuffer();
 	void clearZBuffer();
-	float readZBuffer(int x_pixel, int y_pixel);
-	void writeZBuffer(int x_pixel, int y_pixel, float z_value);
+	double readZBuffer(int x_pixel, int y_pixel);
+	void writeZBuffer(int x_pixel, int y_pixel, double z_value);
 	//draw mesh fucntions
 	void init(LVector4 viewport);
 	void makeSimpleTriangle();
