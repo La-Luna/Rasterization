@@ -29,6 +29,8 @@ LMatrix4 calculateScaleMatrix(float kx,float ky,float kz){
 		);
 		return ans;
 }; 
+
+
 LMatrix4 calculateRotateMatrix(const LVector4& axis1,float cosA,float sinA){//a little bit complicated==
 	float rx = axis1.array[0];//0
 	float ry = axis1.array[1];//0
@@ -52,11 +54,11 @@ LMatrix4 calculateRotateMatrix(const LVector4& axis1,float cosA,float sinA){//a 
 
 	////
 
-	//float nx = axis.array[0];
+	//float nx = axis1.array[0];
 
-	//float ny = axis.array[1];
+	//float ny = axis1.array[1];
 
-	//float nz = axis.array[2];
+	//float nz = axis1.array[2];
 
 
 
