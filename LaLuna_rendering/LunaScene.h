@@ -4,10 +4,10 @@
 #include"LMesh.h"
 #include "LMatrix.h"
 #include "LVert.h"
-
+#include "myDefine.h"
 #include"LVector.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
-LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat,  const LMatrix4& projectionMat,const LVert& v);
+LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
 
 
 class LunaScene;
@@ -33,10 +33,11 @@ public:
 	LMatrix4 m_viewportMat;
 	LMatrix4 m_modelMat;
 	LMatrix4 m_viewMat;
-	LMatrix4 m_perspectiveprojectionMat;
+	LMatrix4 m_projectionMat;
+
 	LMatrix4 initModelMatrix();
 	LMatrix4 initViewMatrix();
-	LMatrix4 initProjectionMatrix();
+	LMatrix4 initProjectionMatrix(LunaProjectionMode);
 	//keep updating:transform matrixis
 
 
@@ -60,6 +61,9 @@ public:
 	void fillTriangleSolid(HDC hdc,const LVert& v0,const LVert& v1,const LVert& v2);
 	void fillPanBottomTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2);
 	void fillPanTopTri_solid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2);
+
+	//draw texture
+	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput);
 
 	//draw pixel functions
 	void drawPixel(HDC hdc, float x, float y, LVector4 color);

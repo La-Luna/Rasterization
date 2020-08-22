@@ -21,4 +21,10 @@ public:
 	LearlyZOutput(){};
 	~LearlyZOutput(){};
 };
+class LFrag{
+public:
+	LVector4 m_color;
+	LVector4 m_position;
+};
+
 #endif

@@ -1,29 +1,30 @@
-﻿Build started 2020/8/21 22:29:20.
+﻿Build started 2020/8/22 17:28:15.
      1>Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LunaScene.cpp
          LunaScene.cpp
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(138): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(139): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(150): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(140): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(151): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(155): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(157): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(162): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(178): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(152): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(156): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(158): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(163): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(179): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(188): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(180): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(189): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(193): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(195): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(199): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(216): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(190): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(194): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(196): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(200): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(217): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(218): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(219): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(491): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(492): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(569): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(219): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(220): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(470): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(497): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(498): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(610): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\funcs.h(40): warning C4715: 'sortfromHigh2Low' : not all control paths return a value
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.lib" /MACHINE:X86 Debug\LaLuna_rendering.res
@@ -47,4 +48,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.73
+Time Elapsed 00:00:00.71

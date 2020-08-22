@@ -51,5 +51,7 @@ public:
 	void setalpha(float v){ d = v; array[3] = v; }
 
 	float operator*(const LVector4& a);
+	LVector4 operator/(const float div);
+
 };
 #endif

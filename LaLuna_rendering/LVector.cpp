@@ -29,3 +29,22 @@ float LVector4::operator*(const LVector4& a){
 	}
 	return ans;
 }
+LVector4 LVector4::operator/(const float div){
+
+	float temp[4];
+	for (int i = 0; i < 4; i++){
+		temp[i] = this->array[i] / div;
+	}
+	LVector4 ans(temp[0],temp[1],temp[2],temp[3]);
+	return ans;
+
+
+	//float t_a, t_b, t_c, t_d;
+	//if (div != 0){
+	//	this->array[0] = this->array[0] / div; this->a = this->array[0];
+	//	this->array[1] = this->array[1] / div; this->b = this->array[1];
+	//	this->array[2] = this->array[2] / div; this->c = this->array[2];
+	//	this->array[3] = this->array[3] / div; this->c = this->array[3];
+	//}
+
+}
