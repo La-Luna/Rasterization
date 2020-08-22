@@ -21,13 +21,30 @@ LVector4::LVector4(const LVector4& v){
 		array[i] = v.array[i];
 	}
 }
-
+LVector4 LVector4::operator+(LVector4 lv){
+	LVector4 temp;
+	temp.array[0] = this->array[0] + lv.array[0]; temp.a = temp.array[0];
+	temp.array[1] = this->array[1] + lv.array[1]; temp.b = temp.array[1];
+	temp.array[2] = this->array[2] + lv.array[2]; temp.c = temp.array[2];
+	temp.array[3] = this->array[3] + lv.array[3]; temp.d = temp.array[3];
+	return temp;
+}
 float LVector4::operator*(const LVector4& a){
 	float ans=0;
 	for (int i = 0; i < 4; i++){
 		ans += this->array[i] * a.array[i];
 	}
 	return ans;
+}
+LVector4 LVector4::operator*(float k){
+	LVector4 temp(*this);
+	temp.array[0] *= k; temp.a *= k;
+	temp.array[1] *= k; temp.b *= k;
+	temp.array[2] *= k; temp.c *= k;
+	temp.array[3] *= k; temp.d *= k;
+
+	return temp;
+
 }
 LVector4 LVector4::operator/(const float div){
 

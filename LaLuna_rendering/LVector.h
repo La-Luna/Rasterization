@@ -50,7 +50,9 @@ public:
 	void setb(float v){ c = v; array[2] = v; }
 	void setalpha(float v){ d = v; array[3] = v; }
 
+	LVector4 operator+(LVector4 lv);
 	float operator*(const LVector4& a);
+	LVector4 operator*( float  k);
 	LVector4 operator/(const float div);
 
 };
