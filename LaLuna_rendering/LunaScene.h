@@ -5,10 +5,11 @@
 #include "LMatrix.h"
 #include "LVert.h"
 #include "myDefine.h"
+#include"LTexture.h"
 #include"LVector.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
-LVert vertexShaderPrograme(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
-
+LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
+LFrag fragmentShaderProgram(const LVert& interpolateV,const LTexture* texture);
 
 class LunaScene;
 extern LunaScene* scene;
@@ -25,9 +26,11 @@ public:
 	//mesh
 	LMesh* m_mesh;			//save the original mesh datas
 	LMesh* transformed_mesh;//save the transformed mesh datas
+
 	
 	
-	
+	void makecubemesh();
+
 	//viewport_matrix
 	LVector4 m_viewport;
 	LMatrix4 m_viewportMat;
@@ -63,6 +66,8 @@ public:
 	void fillPanTopTri_solid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2);
 
 	//draw texture
+	vector<LTexture*> m_texturelist;
+	vector<LVector2> textureCoordlist;
 	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput);
 
 	//draw pixel functions

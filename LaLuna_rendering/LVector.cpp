@@ -46,6 +46,7 @@ LVector4 LVector4::operator*(float k){
 	return temp;
 
 }
+
 LVector4 LVector4::operator/(const float div){
 
 	float temp[4];

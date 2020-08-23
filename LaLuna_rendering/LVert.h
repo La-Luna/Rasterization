@@ -8,9 +8,13 @@ using namespace std;
 
 class LVert{
 public:
-	 
+	LVert(){
+		texture_ID = 0;
+	}
 	LVector4 position;
 	LVector4 color;
+	LVector2 texcoord;
+	int texture_ID;
 };
 
 
@@ -22,6 +26,8 @@ public:
 	~LearlyZOutput(){};
 };
 class LFrag{
+
+	friend LFrag;
 public:
 	LVector4 m_color;
 	LVector4 m_position;

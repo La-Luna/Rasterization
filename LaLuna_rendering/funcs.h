@@ -72,5 +72,14 @@ double lineInsertWithHorizontalLine(const LVector4& top, const LVector4& bottom,
 	}
 	return x0;
 }
+LVector4 perComponentProduct(const LVector4&v0, const LVector4&v1){
+	LVector4 temp(
+		v0.a*v1.a,
+		v0.b*v1.b,
+		v0.c*v1.c,
+		v0.d*v1.d
+		);
+	return temp;
+}
 #endif
 

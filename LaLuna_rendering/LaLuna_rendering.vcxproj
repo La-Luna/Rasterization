@@ -50,7 +50,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -85,6 +85,7 @@
     <ClInclude Include="funcs.h" />
     <ClInclude Include="LMatrix.h" />
     <ClInclude Include="LMesh.h" />
+    <ClInclude Include="LTexture.h" />
     <ClInclude Include="LTriangle.h" />
     <ClInclude Include="LunaGLMath.h" />
     <ClInclude Include="LunaScene.h" />
@@ -92,6 +93,7 @@
     <ClInclude Include="LVert.h" />
     <ClInclude Include="LaLuna_rendering.h" />
     <ClInclude Include="myDefine.h" />
+    <ClInclude Include="readBmp.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -100,9 +102,11 @@
     <ClCompile Include="LaLuna_rendering.cpp" />
     <ClCompile Include="LMatrix.cpp" />
     <ClCompile Include="LMesh.cpp" />
+    <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="LunaScene.cpp" />
     <ClCompile Include="LVector.cpp" />
     <ClCompile Include="LVert.cpp" />
+    <ClCompile Include="readBmp.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

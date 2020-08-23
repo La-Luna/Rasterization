@@ -52,6 +52,7 @@ public:
 
 	LVector4 operator+(LVector4 lv);
 	float operator*(const LVector4& a);
+
 	LVector4 operator*( float  k);
 	LVector4 operator/(const float div);
 

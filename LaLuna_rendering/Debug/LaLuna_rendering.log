@@ -1,51 +1,79 @@
-﻿Build started 2020/8/22 23:22:45.
-     1>Project "D:\rasterization\LunaRaster\Rasterization\LaLuna_rendering\LaLuna_rendering.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2020/8/23 21:47:14.
+     1>Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LunaScene.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LaLuna_rendering.cpp LMatrix.cpp LMesh.cpp LTexture.cpp LunaScene.cpp LVector.cpp LVert.cpp readBmp.cpp
+         readBmp.cpp
+         LVert.cpp
+         LVector.cpp
          LunaScene.cpp
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(139): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(140): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(151): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(152): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(156): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(158): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(166): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(182): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(183): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(197): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(199): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(207): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(224): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(225): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(226): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(227): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(477): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(504): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(505): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\lunascene.cpp(620): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\rasterization\lunaraster\rasterization\laluna_rendering\funcs.h(40): warning C4715: 'sortfromHigh2Low' : not all control paths return a value
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(31): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(33): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(39): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(41): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(26): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(148): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(149): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(160): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(161): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(165): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(167): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(176): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(202): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(203): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(207): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(209): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(218): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(235): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(236): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(237): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(238): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(414): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(452): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(453): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(568): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+         LTexture.cpp
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.cpp(1): warning C4627: '#include "LTexture.h"': skipped when looking for precompiled header use
+                 Add directive to 'stdafx.h' or rebuild precompiled header
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.cpp(2): warning C4627: '#include "LVector.h"': skipped when looking for precompiled header use
+                 Add directive to 'stdafx.h' or rebuild precompiled header
+         LMesh.cpp
+         LMatrix.cpp
+         LaLuna_rendering.cpp
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(31): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(33): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(39): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(41): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\laluna_rendering.cpp(136): warning C4244: 'argument' : conversion from 'const float' to 'int', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\laluna_rendering.cpp(155): warning C4244: 'argument' : conversion from 'LONG' to 'float', possible loss of data
+         Generating Code...
+     1>d:\c++learning\laluna_rendering\laluna_rendering\funcs.h(40): warning C4715: 'sortfromHigh2Low' : not all control paths return a value
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Debug\LaLuna_rendering.res" LaLuna_rendering.rc 
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.lib" /MACHINE:X86 Debug\LaLuna_rendering.res
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.lib" /MACHINE:X86 Debug\LaLuna_rendering.res
          Debug\LaLuna_rendering.obj
          Debug\LMatrix.obj
          Debug\LMesh.obj
+         Debug\LTexture.obj
          Debug\LunaScene.obj
          Debug\LVector.obj
          Debug\LVert.obj
+         Debug\readBmp.obj
          Debug\stdafx.obj
-         LINK : D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.exe not found or not built by the last incremental link; performing full link
-         LaLuna_rendering.vcxproj -> D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.exe
+         LaLuna_rendering.vcxproj -> D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe
        PostBuildEvent:
-         editbin/subsystem:console D:\rasterization\LunaRaster\Rasterization\Debug\LaLuna_rendering.exe
+         editbin/subsystem:console D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe
          :VCEnd
          Microsoft (R) COFF/PE Editor Version 12.00.40629.0
          Copyright (C) Microsoft Corporation.  All rights reserved.
          
          
-     1>Done Building Project "D:\rasterization\LunaRaster\Rasterization\LaLuna_rendering\LaLuna_rendering.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.83
+Time Elapsed 00:00:02.86
