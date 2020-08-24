@@ -285,10 +285,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//3
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(0, 1, 3));
 		temp_tri_ID_list.push_back(LTriangle(1, 2, 3));
@@ -309,10 +314,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, -5, 1)); int vID3 = temp_position_list.size() - 1;//7
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -331,10 +341,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//11
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -353,10 +368,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//15
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -375,10 +395,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, -5, 1)); int vID3 = temp_position_list.size() - 1;//19
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -397,10 +422,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, -5, -5, 1)); int vID3 = temp_position_list.size() - 1;//23
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -419,7 +449,7 @@ void LunaScene::makecubemesh(){
 	m_mesh->mesh_positionlist = temp_position_list;
 	m_mesh->mesh_pointscolorlist = temp_pos_color_list;
 	m_mesh->mesh_triangleslist = temp_tri_ID_list;
-
+	m_mesh->mesh_texcoordlist = textureCoordlist;
 
 }
 void LunaScene::makeSimpleCube(){
@@ -427,7 +457,7 @@ void LunaScene::makeSimpleCube(){
 
 	makecubemesh();
 	LTexture* cubetexture = new LTexture();
-	string texFileName = "tex.bmp";
+	string texFileName = "cutedog.bmp";
 	bool success = cubetexture->initwithFile(texFileName.c_str());
 	m_texturelist.push_back(cubetexture);
 
@@ -449,12 +479,12 @@ LMatrix4 LunaScene::initModelMatrix(){
 	LVector4 temp_trans(50, 50, -50 , 0);
 	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
 	LVector4 rotate_axis(0, 1, 0, 1);
-	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.573, 0.819);//cosA=0.5,sinA=0.86;degree=60;
+	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
 	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1,0,0, 1), 0.707, 0.707);
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
-	temp_model_mat = temp_rotate_mat1*temp_rotate_mat2;
+	temp_model_mat = temp_rotate_mat2;
 	return temp_model_mat;
 	//LMatrix4 temp_mat=calculateRotateMatrix()
 
@@ -580,27 +610,56 @@ LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const L
 	const float y0 = v0.position.array[1];
 	const float z0 = v0.position.array[2];
 	const float w0 = v0.position.array[3];
+	const float s0 = v0.texcoord.array[0];
+	const float t0 = v0.texcoord.array[1];
+
 	LVector4 color0 = v0.color;
 
 	const float x1 = v1.position.array[0];
 	const float y1 = v1.position.array[1];
 	const float z1 = v1.position.array[2];
 	const float w1 = v1.position.array[3];
+	const float s1 = v1.texcoord.array[0];
+	const float t1 = v1.texcoord.array[1];
 	 LVector4 color1 = v1.color;
 	
 	const float x2 = v2.position.array[0];
 	const float y2 = v2.position.array[1];
 	const float z2 = v2.position.array[2];
 	const float w2 = v2.position.array[3];
+	const float s2 = v2.texcoord.array[0];
+	const float t2 = v2.texcoord.array[1];
 	LVector4 color2 = v2.color;
 	
+	float s, t;
+	{
+
+		//n = -15;
+		//f = -100;
+		const float f =-100;//100
+		const float n = -15;//10
+		const float M =  f / (f - n);//1.11
+		const float s0_mul_z0SubM = s0*(z0 - M);
+		const float s1_mul_z1SubM = s1*(z1 - M);
+		const float s2_mul_z2SubM = s2*(z2 - M);
+		float s0_mul_zSubM = s0_mul_z0SubM + (s1_mul_z1SubM - s0_mul_z0SubM)*A + (s2_mul_z2SubM - s0_mul_z0SubM)*B;
+		const float t0_mul_z0SubM = t0*(z0 - M);
+		const float t1_mul_z1SubM = t1*(z1 - M);
+		const float t2_mul_z2SubM = t2*(z2 - M);
+		float t_mul_zSubM = t0_mul_z0SubM + (t1_mul_z1SubM - t0_mul_z0SubM)*A + (t2_mul_z2SubM - t0_mul_z0SubM)*B;
+		s = s0_mul_zSubM / (z - M);
+		t = t_mul_zSubM / (z - M);
+
+	}
+
 	float cal_w = (1 - A - B)*w0 + A*w1 + B*w2;
 	LVector4 cal_color = color0*(1 - A - B) + color1*A + color2*B;
 
-	LVector4 t(x, y, z, cal_w);
+	LVector4 t_lv4(x, y, z, cal_w);
 	LVert temp;
 	temp.color = cal_color;
-	temp.position = t;
+	temp.position = t_lv4;
+	temp.texcoord = { s, t };
 
 	return temp;
 

@@ -2,6 +2,7 @@
 #include"LVector.h"
 #include<iostream>
 using namespace std;
+
 LVector4::LVector4(float a0, float b0, float c0, float d0){
 	a= a0;
 	b = b0;

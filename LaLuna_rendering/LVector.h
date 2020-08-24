@@ -17,9 +17,10 @@ public:
 	}
 	LVector2(){};
 	LVector2(const LVector2& B){
-		array[0] = B.a;
-		array[1] = B.b;
+		array[0] = B.a;a=B.a;
+		array[1] = B.b;b=B.b;
 	}
+
 	~LVector2(){};
 	float array[2];
 	float a;
