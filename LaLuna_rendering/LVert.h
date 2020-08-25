@@ -12,6 +12,7 @@ public:
 		texture_ID = 0;
 	}
 	LVector4 position;
+	LVector4 ori_position;
 	LVector4 color;
 	LVector2 texcoord;
 	int texture_ID;

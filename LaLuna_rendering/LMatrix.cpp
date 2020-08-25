@@ -31,14 +31,15 @@ LMatrix4::LMatrix4(const LMatrix4& tm){
 	}
 }
 LVector4 LMatrix4::operator*(const LVector4& temp)const{
-	LVector4 ans;
+	LVector4 ans=temp;
 	for (int i = 0; i < 4; i++){
 		ans.array[i]=matrix[i]*temp.a+matrix[i+4]*temp.b+matrix[i+8]*temp.c+matrix[i+12]*temp.d;
 	}
-	ans.a = ans.array[0];
-	ans.b = ans.array[1];
-	ans.c = ans.array[2];
-	ans.d = ans.array[3];
+	ans.setr(ans.array[0]);
+	ans.setg(ans.array[1]);
+	ans.setb(ans.array[2]);
+	ans.setalpha(ans.array[3]);
+
 	return ans;
 }
 LMatrix4 LMatrix4::operator*(const LMatrix4& A)const{

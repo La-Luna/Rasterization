@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<int> sortfromHigh2Low(float a, float b, float c){
-	cout << "run into LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2)" << endl;
+	//cout << "run into LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2)" << endl;
 	//012
 	//021
 	//102

@@ -4,11 +4,14 @@
 #include "funcs.h"
 //LunaScene* scene = NULL;
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
+
 LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat,const LVert& v){
 	LVert temp_v=v;
 	//temp_v.position=
 	temp_v.position = modelMat*temp_v.position;
 	temp_v.position = viewMat*temp_v.position;
+
+	temp_v.ori_position = temp_v.position;
 	temp_v.position = projectionMat*temp_v.position;
 	return temp_v;
 
@@ -87,7 +90,7 @@ void LunaScene::clearZBuffer(){
 	}
 }
 void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2){
-	//cout << "run into LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2)" << endl;
+
 		//cull back face
 
 
@@ -167,8 +170,11 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 			float zvalue_inbuffer = readZBuffer(j,i);
 			//cout << " zvalue_inbuffer" << zvalue_inbuffer << "/tearlyZoutput.m_z" << earlyZoutput.m_z << endl;
 			if (earlyZoutput.m_z>zvalue_inbuffer){
-
-			LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(top, bottom_left, bottom_right, earlyZoutput);
+				int temp_textureHeight =m_texturelist[top.texture_ID]->m_Bmp->bmpHeight;
+				int temp_textureWidth = m_texturelist[top.texture_ID]->m_Bmp->bmpWidth;
+				//cout << "Height of the texture=" << temp_textureHeight << endl;
+				//cout << "Width of the texture=" << temp_textureWidth << endl;
+			LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(top, bottom_left, bottom_right, earlyZoutput, temp_textureWidth,temp_textureHeight);
 			//fragment process
 			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
 				
@@ -208,8 +214,9 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low, top_left,top_right, pixelCenter.a, pixelCenter.b);
 			float zvalue_inbuffer = readZBuffer(xInt, yInt);
 			if (earlyZoutput.m_z > zvalue_inbuffer){
-
-				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput);
+				int temp_textureHeight = m_texturelist[low.texture_ID]->m_Bmp->bmpHeight;
+				int temp_textureWidth = m_texturelist[low.texture_ID]->m_Bmp->bmpWidth;
+				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight);
 
 				//fragment shader
 				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
@@ -447,6 +454,7 @@ void LunaScene::makecubemesh(){
 		temp_position_list[i].c *= 5; temp_position_list[i].array[2] *= 5;
 	}
 	m_mesh->mesh_positionlist = temp_position_list;
+	m_mesh->mesh_originpositionlist.resize(temp_position_list.size());
 	m_mesh->mesh_pointscolorlist = temp_pos_color_list;
 	m_mesh->mesh_triangleslist = temp_tri_ID_list;
 	m_mesh->mesh_texcoordlist = textureCoordlist;
@@ -479,12 +487,12 @@ LMatrix4 LunaScene::initModelMatrix(){
 	LVector4 temp_trans(50, 50, -50 , 0);
 	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
 	LVector4 rotate_axis(0, 1, 0, 1);
-	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
-	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1,0,0, 1), 0.707, 0.707);
+	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.5, 0.866);//cosA=0.5,sinA=0.86;degree=60;
+	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.5, 0.866);// 0.707, 0.707
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
-	temp_model_mat = temp_rotate_mat2;
+	temp_model_mat = temp_rotate_mat2*temp_rotate_mat1;
 	return temp_model_mat;
 	//LMatrix4 temp_mat=calculateRotateMatrix()
 
@@ -575,8 +583,9 @@ void LunaScene::transformVertixes(){
 	//use viewport matrix change the vertexes coordinates
 	int vertices_num = transformed_mesh->mesh_positionlist.size();
 	for (int i = 0; i < vertices_num;i++){
-		cout << i << endl;
+	
 		//first to NDC
+		transformed_mesh->mesh_positionlist[i].w = transformed_mesh->mesh_positionlist[i].d;
 		transformed_mesh->mesh_positionlist[i]=transformed_mesh->mesh_positionlist[i] / (transformed_mesh->mesh_positionlist[i].d);
 		//and then to viewport coordinates
 		transformed_mesh->mesh_positionlist[i] = m_viewportMat*transformed_mesh->mesh_positionlist[i];
@@ -599,7 +608,7 @@ void LunaScene::calculateViewportMatrix(LVector4 viewport){
 		m_viewportMat = temp;
 
 }
-LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const LVert& v1, const LVert&v2, const LearlyZOutput& earlyOutput){
+LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const LVert& v1, const LVert&v2, const LearlyZOutput& earlyOutput,int texWidth,int texHeight){
 	const float A = earlyOutput.m_A;
 	const float B = earlyOutput.m_B;
 	const float x = earlyOutput.m_x;
@@ -634,22 +643,34 @@ LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const L
 	float s, t;
 	{
 
-		//n = -15;
-		//f = -100;
-		const float f =-100;//100
-		const float n = -15;//10
-		const float M =  f / (f - n);//1.11
-		const float s0_mul_z0SubM = s0*(z0 - M);
-		const float s1_mul_z1SubM = s1*(z1 - M);
-		const float s2_mul_z2SubM = s2*(z2 - M);
-		float s0_mul_zSubM = s0_mul_z0SubM + (s1_mul_z1SubM - s0_mul_z0SubM)*A + (s2_mul_z2SubM - s0_mul_z0SubM)*B;
-		const float t0_mul_z0SubM = t0*(z0 - M);
-		const float t1_mul_z1SubM = t1*(z1 - M);
-		const float t2_mul_z2SubM = t2*(z2 - M);
-		float t_mul_zSubM = t0_mul_z0SubM + (t1_mul_z1SubM - t0_mul_z0SubM)*A + (t2_mul_z2SubM - t0_mul_z0SubM)*B;
-		s = s0_mul_zSubM / (z - M);
-		t = t_mul_zSubM / (z - M);
 
+		s = (1 - A - B)*s0 + A*s1 + B*s2;
+		t = (1 - A - B)*t0 + A*t1 + B*t2;
+
+		/*	n = -15;
+			f = -100;*/
+		//const float f =-100;//100
+		//const float n = -15;//10
+		//const float M =  f / (f - n);//1.11
+		//const float s0_mul_z0SubM = s0*(z0 - M);
+		//const float s1_mul_z1SubM = s1*(z1 - M);
+		//const float s2_mul_z2SubM = s2*(z2 - M);
+		//float s0_mul_zSubM = s0_mul_z0SubM + (s1_mul_z1SubM - s0_mul_z0SubM)*A + (s2_mul_z2SubM - s0_mul_z0SubM)*B;
+		//const float t0_mul_z0SubM = t0*(z0 - M);
+		//const float t1_mul_z1SubM = t1*(z1 - M);
+		//const float t2_mul_z2SubM = t2*(z2 - M);
+		//float t_mul_zSubM = t0_mul_z0SubM + (t1_mul_z1SubM - t0_mul_z0SubM)*A + (t2_mul_z2SubM - t0_mul_z0SubM)*B;
+		//s = s0_mul_zSubM / (z - M);
+		//t = t_mul_zSubM / (z - M);
+
+		//float p0w = v0.position.w; 
+		//float p1w = v1.position.w;
+		//float p2w = v2.position.w;
+
+		//double zr = (1 - A - B)*(1 / p0w) + A*(1 / p1w) + B*(1 / p2w);
+		//s = (((1-A-B)*(s0/p0w)+A*(s1/p1w)+B*(s2/p2w))/zr)*texWidth;
+		//t = (((1 - A - B)*(t0 / p0w) + A*(t1 / p1w) + B*(t2 / p2w)) / zr)*texHeight;
+		////cout << "s:" << s << "   t:" << t << endl;
 	}
 
 	float cal_w = (1 - A - B)*w0 + A*w1 + B*w2;
@@ -774,10 +795,16 @@ LVert LunaScene::interpolate_inViewportSpace(const LVert& v1, const LVert&v2, fl
 	const float x1 = v1.position.a;
 	const float y1 = v1.position.b;
 	const float z1 = v1.position.c;
+	const float s1 = v1.texcoord.a;
+	const float t1 = v1.texcoord.b;
+
 
 	const float x2 = v2.position.a;
 	const float y2 = v2.position.b;
 	const float z2 = v2.position.c;
+	const float s2 = v2.texcoord.a;
+	const float t2 = v2.texcoord.b;
+
 
 	const float dx = x1 - x2;
 	const float dy = y1 - y2;
@@ -791,9 +818,12 @@ LVert LunaScene::interpolate_inViewportSpace(const LVert& v1, const LVert&v2, fl
 	}
 
 	float des_z = k*(z1 - z2) + z2;
+	float des_s = k*(s1 - s2) + s2;
+	float des_t = k*(t1 - t2) + t2;
 
 	LVert v = v1;
 	v.position = LVector4(x, y, des_z, v1.position.d);
+	v.texcoord = LVector2(des_s, des_t);
 
 	return v;
 

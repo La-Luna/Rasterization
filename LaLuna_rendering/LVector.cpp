@@ -18,6 +18,8 @@ LVector4::LVector4(const LVector4& v){
 	b = v.b;
 	c = v.c;
 	d = v.d;
+	
+	w = v.w;
 	for (int i = 0; i < 4; i++){
 		array[i] = v.array[i];
 	}
@@ -49,12 +51,16 @@ LVector4 LVector4::operator*(float k){
 }
 
 LVector4 LVector4::operator/(const float div){
-
+	LVector4 ans = *this;
 	float temp[4];
 	for (int i = 0; i < 4; i++){
 		temp[i] = this->array[i] / div;
 	}
-	LVector4 ans(temp[0],temp[1],temp[2],temp[3]);
+
+	ans.setr(temp[0]);
+	ans.setg(temp[1]);
+	ans.setb(temp[2]);
+	ans.setalpha(temp[3]);
 	return ans;
 
 

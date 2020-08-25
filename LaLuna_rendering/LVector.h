@@ -42,6 +42,7 @@ public:
 	float c;
 	float d;
 	float array[4];
+	float w = 1;
 	float geta(){ return array[0]; }
 	float getb(){ return array[1]; }
 	float getc(){ return array[2]; }

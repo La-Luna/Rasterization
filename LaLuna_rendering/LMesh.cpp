@@ -14,4 +14,6 @@ void LMesh::setVert(int i,LVert v){
 	mesh_positionlist[i] = v.position;
 	mesh_pointscolorlist[i] = v.color;
 	mesh_texcoordlist[i] = v.texcoord;
+	mesh_originpositionlist[i] = v.ori_position;
+
 }

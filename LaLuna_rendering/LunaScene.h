@@ -68,7 +68,7 @@ public:
 	//draw texture
 	vector<LTexture*> m_texturelist;
 	vector<LVector2> textureCoordlist;
-	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput);
+	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput, int texWidth, int texHeight);
 
 	//draw pixel functions
 	void drawPixel(HDC hdc, float x, float y, LVector4 color);
