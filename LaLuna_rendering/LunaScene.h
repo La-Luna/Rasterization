@@ -51,7 +51,7 @@ public:
 	LVert interpolate_inViewportSpace(const LVert& v1, const LVert&v2, float x, float y);
 	//ztest
 	double* z_test_buffer;
-	LearlyZOutput interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,const LVert&v1,const LVert&v2,float xp,float yp);
+	LearlyZOutput interpolateInTri_inViewportSpace_Zvalue(const LVert&v0, const LVert&v1, const LVert&v2, float xp, float yp, LunaProjectionMode mode);
 	void initZBuffer();
 	void clearZBuffer();
 	double readZBuffer(int x_pixel, int y_pixel);
@@ -61,14 +61,14 @@ public:
 	void makeSimpleTriangle();
 	void makeSimpleCube();
 	void softRasterization(HDC hdc);
-	void fillTriangleSolid(HDC hdc,const LVert& v0,const LVert& v1,const LVert& v2);
-	void fillPanBottomTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2);
-	void fillPanTopTri_solid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2);
+	void fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2, LunaProjectionMode mode);
+	void fillPanBottomTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2, LunaProjectionMode mode);
+	void fillPanTopTri_solid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2, LunaProjectionMode mode);
 
 	//draw texture
 	vector<LTexture*> m_texturelist;
 	vector<LVector2> textureCoordlist;
-	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput, int texWidth, int texHeight);
+	LVert interpolate_inViewportSpace_otherAttrib(const LVert&low, const LVert& top_left, const LVert&top_right, const LearlyZOutput& earlyOutput, int texWidth, int texHeight, LunaProjectionMode mode);
 
 	//draw pixel functions
 	void drawPixel(HDC hdc, float x, float y, LVector4 color);
