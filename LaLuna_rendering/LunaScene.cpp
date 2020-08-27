@@ -24,7 +24,7 @@ LFrag fragmentShaderProgram(const LVert& interpolateV, const LTexture* texture){
 }
 LunaScene::~LunaScene(){
 	if(m_mesh)delete m_mesh;
-	if(transformed_mesh)delete transformed_mesh;
+	if(transformed_mesh)delete transformed_mesh; 
 	if (z_test_buffer)delete[] z_test_buffer;
 	for(int i = 0; i < m_texturelist.size(); i++){
 		delete m_texturelist[i];
@@ -61,7 +61,7 @@ void LunaScene::softRasterization(HDC hdc){
 	//initiate the model matrix and view matrix
 	m_modelMat = initModelMatrix();
 	m_viewMat = initViewMatrix();
-	m_projectionMat =initProjectionMatrix(lunaOrthogonalpromode);
+	m_projectionMat =initProjectionMatrix(lunaPerspectivepromode);
 
 	*transformed_mesh = *m_mesh;
 	//transforn vertixes coordinates to viewport coordinates
@@ -79,7 +79,7 @@ void LunaScene::softRasterization(HDC hdc){
 		LVert v0=transformed_mesh->getVert(v0ID);
 		LVert v1=transformed_mesh->getVert(v1ID);
 		LVert v2=transformed_mesh->getVert(v2ID);
-		fillTriangleSolid(hdc,v0,v1,v2,lunaOrthogonalpromode);
+		fillTriangleSolid(hdc,v0,v1,v2,lunaPerspectivepromode);
 		//cout << "v0:" << v0.position.a << "," << v0.position.b << "," << v0.position.c << "," << v0.position.d<<endl;
 		//cout << "v1:" << v1.position.a << "," << v1.position.b << "," << v1.position.c << "," << v1.position.d<<endl;
 		//cout << "v2:" << v2.position.a << "," << v2.position.b << "," << v2.position.c << "," << v2.position.d<<endl;
@@ -105,7 +105,7 @@ void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, con
 	vlist.push_back(v0);
 	vlist.push_back(v1);
 	vlist.push_back(v2);
-	vector<int> high2low;
+	vector<int> high2low;  
 	high2low = sortfromHigh2Low(v0.position.b,v1.position.b,v2.position.b);
 	int high = high2low[0];
 	int middle = high2low[1];
@@ -513,7 +513,7 @@ LMatrix4 LunaScene::initViewMatrix(){
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 0, -50, 1
+		0, 0, -10, 1
 		);
 	LMatrix4 temp_viewm = temp_view_mr*temp_view_mt;
 	//LMatrix4 temp_viewm ;
@@ -525,42 +525,42 @@ LMatrix4 LunaScene::initProjectionMatrix(LunaProjectionMode mode){
 
 	float fov=45.0;//cot(fov)=2n/h
 	float respect=1.0;//width_view/height_view
+	float width_see;
+	float height_see;
+	height_see = 100;
+
 	float r, l, t, b, n, f;
 	l = b = -50;
 	r = t = 50;
-	n = -10;
-	f = -100;
-	if (mode == lunaPerspectivepromode){
-		float t11 = (2 * n) / (r - l);
-		float t13 = -(r + l) / (r - l);
-		float t22 = (2 * n) / (t - b);
-		float t23 = -(t + b) / (t - b);
-		//float t33 = (n + f) / (n - f);
-		//float t34 = -(2 * n * f) / (n - f);
-		float t33 = f / (n - f);
-		float t34 = -(n * f) / (n - f);
+	n = 10;//mutipul -1;
+	f = 100;//multiple -1;
+	if (mode == lunaPerspectivepromode){  
+
+
+
+		float tan_fov_2 = tan((fov / 2.0)*(PI / 180));
+		float t11 = 1 / (respect*tan_fov_2);
+		float t22 = 1 / tan_fov_2;
+		float t33 = -(f + n) / (f - n);
+		float t34 = -(2 * n * f) / (f - n);
+
 		LMatrix4 temp_proj(
 			t11, 0, 0, 0,
 			0, t22, 0, 0,
-			t13, t23, t33, 1,
+			0, 0, t33, 1,
 			0, 0, t34, 0
 			);
 
-		//LMatrix4 temp_projm(
-		//	1 / 50, 0, 0, 0,
-		//	0, 1 / 50, 0, 0,
-		//	-1, -1, -101 / 99, 1,
-		//	0, 0, 200 / 99, 0
-		//	);
-		//m_perspectiveprojectionMat = temp_projm;
+
 		return temp_proj;
 	}
 	else{
+		width_see = respect*height_see;
+		n = n*(-1);
+		f = f*(-1);
 
-		float tan_fov_2 = tan((fov / 2.0)*(PI / 180));
-
-		float t11 = 1 / (n*respect*tan_fov_2);
-		float t22 = 1 / (n*tan_fov_2);
+		float t11 = 2 /width_see ;
+		float t22 = 2/ height_see;
 		float t33 = 2/ (n - f);
 		float t34 = -(n+f) / (n - f);
 		LMatrix4 temp_proj(
@@ -600,7 +600,7 @@ void LunaScene::transformVertixes(){
 		transformed_mesh->mesh_orth_z[i]=transformed_mesh->mesh_positionlist[i].d;
 		transformed_mesh->mesh_positionlist[i]=transformed_mesh->mesh_positionlist[i] / (transformed_mesh->mesh_positionlist[i].d);
 		//and then to viewport coordinates
-		transformed_mesh->mesh_positionlist[i] = m_viewportMat*transformed_mesh->mesh_positionlist[i];
+        transformed_mesh->mesh_positionlist[i] = m_viewportMat*transformed_mesh->mesh_positionlist[i];
 
 	}
 
