@@ -21,7 +21,7 @@ LFrag fragmentShaderProgram(const LVert& interpolateV, const LTexture* texture){
 	LFrag tempfrag;
 	tempfrag.m_position = interpolateV.position;
 	tempfrag.m_color = interpolateV.color;
-	//tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
+	tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
 	return tempfrag;
 }
 LunaScene::~LunaScene(){
@@ -52,7 +52,7 @@ void LunaScene::initZBuffer(){
 	int z_buffer_size = (int)m_viewport.c*(int)m_viewport.d;
 	z_test_buffer = new double[z_buffer_size];
 	for (int i = 0; i < z_buffer_size; i++){
-		z_test_buffer[i] = -200;
+		z_test_buffer[i] = 10;
 	}
 }
 void LunaScene::softRasterization(HDC hdc){
@@ -93,7 +93,7 @@ void LunaScene::softRasterization(HDC hdc){
 void LunaScene::clearZBuffer(){
 	int buffersize = (int)m_viewport.c*(int)m_viewport.d;
 	for (int i = 0; i < buffersize; i++){
-		z_test_buffer[i] = -200;
+		z_test_buffer[i] =10;
 	}
 }
 void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2,LunaProjectionMode mode){
@@ -175,8 +175,9 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 			LVector2 pixelCenter = LVector2(j + 0.5, i + 0.5);
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(top, bottom_left, bottom_right, pixelCenter.a, pixelCenter.b,mode);
 			float zvalue_inbuffer = readZBuffer(j,i);
+			if (mode == lunaOrthogonalpromode)earlyZoutput.m_z *= (-1);
 			//cout << " zvalue_inbuffer" << zvalue_inbuffer << "/tearlyZoutput.m_z" << earlyZoutput.m_z << endl;
-			if (earlyZoutput.m_z>zvalue_inbuffer){
+			if (earlyZoutput.m_z<zvalue_inbuffer){
 				int temp_textureHeight =m_texturelist[top.texture_ID]->m_Bmp->bmpHeight;
 				int temp_textureWidth = m_texturelist[top.texture_ID]->m_Bmp->bmpWidth;
 				//cout << "Height of the texture=" << temp_textureHeight << endl;
@@ -220,7 +221,8 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 			LVector2 pixelCenter = LVector2(xInt + 0.5, yInt + 0.5);
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low, top_left,top_right, pixelCenter.a, pixelCenter.b,mode);
 			float zvalue_inbuffer = readZBuffer(xInt, yInt);
-			if (earlyZoutput.m_z > zvalue_inbuffer){
+			if (mode == lunaOrthogonalpromode)earlyZoutput.m_z *= (-1);
+			if (earlyZoutput.m_z < zvalue_inbuffer){
 				int temp_textureHeight = m_texturelist[low.texture_ID]->m_Bmp->bmpHeight;
 				int temp_textureWidth = m_texturelist[low.texture_ID]->m_Bmp->bmpWidth;
 				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight,mode);
@@ -299,15 +301,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//3
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(0, 1, 3));
 		temp_tri_ID_list.push_back(LTriangle(1, 2, 3));
@@ -328,15 +330,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, -5, 1)); int vID3 = temp_position_list.size() - 1;//7
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -355,15 +357,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//11
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-	/*	temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));*/
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -382,15 +384,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, 5, 1)); int vID3 = temp_position_list.size() - 1;//15
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -409,15 +411,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, 5, -5, 1)); int vID3 = temp_position_list.size() - 1;//19
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -436,15 +438,15 @@ void LunaScene::makecubemesh(){
 		temp_position_list.push_back(LVector4(-5, -5, -5, 1)); int vID3 = temp_position_list.size() - 1;//23
 
 
-		temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
-		temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
-		temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 0, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 1, 0, 0));
+		//temp_pos_color_list.push_back(LVector4(0, 0, 1, 0));
+		//temp_pos_color_list.push_back(LVector4(1, 1, 0, 0));
 
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
-		//temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
+		temp_pos_color_list.push_back(LVector4(1, 1, 1, 0));
 
 		temp_tri_ID_list.push_back(LTriangle(vID0, vID1, vID3));
 		temp_tri_ID_list.push_back(LTriangle(vID1, vID2, vID3));
@@ -472,7 +474,7 @@ void LunaScene::makeSimpleCube(){
 
 	makecubemesh();
 	LTexture* cubetexture = new LTexture();
-	string texFileName = "cutedog.bmp";
+	string texFileName = "ÌõÎÆ.bmp";
 	bool success = cubetexture->initwithFile(texFileName.c_str());
 	m_texturelist.push_back(cubetexture);
 
@@ -494,12 +496,12 @@ LMatrix4 LunaScene::initModelMatrix(){
 	LVector4 temp_trans(50, 50, -50 , 0);
 	LMatrix4 temp_trans_mat = calculateTranslateMatrix(temp_trans);
 	LVector4 rotate_axis(0, 1, 0, 1);
-	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.819, 0.574);//cosA=0.5,sinA=0.86;degree=60;
-	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.866, 0.5);// 0.707, 0.707  //0.819,,0.574
+	LMatrix4 temp_rotate_mat2 = calculateRotateMatrix(rotate_axis, 0.707, 0.707);//cosA=0.5,sinA=0.86;degree=60;
+	LMatrix4 temp_rotate_mat1 = calculateRotateMatrix(LVector4(1, 0, 0, 1), 0.707, 0.707);// 0.707, 0.707  //0.819,,0.574
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
-	temp_model_mat = temp_rotate_mat1;
+	temp_model_mat = temp_rotate_mat1*temp_rotate_mat2;
 	return temp_model_mat;
 	//LMatrix4 temp_mat=calculateRotateMatrix()
 
@@ -525,26 +527,26 @@ LMatrix4 LunaScene::initViewMatrix(){
 LMatrix4 LunaScene::initProjectionMatrix(LunaProjectionMode mode){
 	float fov = 45;//cot(fov)=2n/h
 	float respect=1.0;//width_view/height_view
-	float width_see;
-	float height_see;
-	height_see = 200;
-
-	float r, l, t, b, n, f;
-	l = b = -50;
-	r = t = 50;
-	n = 0.1;//mutipul -1;
-	f = 100;//multiple -1;
+	float n = 0.1;//mutipul -1;
+	float f = 100;//multiple -1;
+	float width_n,width_see;
+	float height_n,height_see;
+	float cube_pos_z=10;			//!!change!!
+	height_n =2*n*tan((fov/2.0)*(PI/180));
+	height_see = height_n*cube_pos_z/n;
 	if (mode == lunaPerspectivepromode){  
+		n = n*(-1);
+		f = f*(-1);
 		float tan_fov_2 = tan((fov / 2.0)*(PI / 180));
 		//cout << tan_fov_2 << endl;
 		float t11 = 1 / (respect*tan_fov_2);
 		float t22 = 1 / tan_fov_2;
-		float t33 = -(f + n) / (f - n);
-		float t34 = -(2 * n * f) / (f - n);
+		float t33 = (f + n) / (n-f);
+		float t34 = -(2 * n * f) / ( n-f );
 		LMatrix4 temp_proj(
 			t11, 0, 0, 0,
 			0, t22, 0, 0,
-			0, 0, t33, 1,
+			0, 0, t33, -1,
 			0, 0, t34, 0
 			);
 		return temp_proj;
@@ -657,24 +659,24 @@ LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const L
 	{
 
 
-		s = (1 - A - B)*s0 + A*s1 + B*s2;
-		t = (1 - A - B)*t0 + A*t1 + B*t2;
+		//s = (1 - A - B)*s0 + A*s1 + B*s2;
+		//t = (1 - A - B)*t0 + A*t1 + B*t2;
 
 		/*	n = -15;
 			f = -100;*/
-		//const float f =-100;//100
-		//const float n = -15;//10
-		//const float M =  f / (f - n);//1.11
-		//const float s0_mul_z0SubM = s0*(z0 - M);
-		//const float s1_mul_z1SubM = s1*(z1 - M);
-		//const float s2_mul_z2SubM = s2*(z2 - M);
-		//float s0_mul_zSubM = s0_mul_z0SubM + (s1_mul_z1SubM - s0_mul_z0SubM)*A + (s2_mul_z2SubM - s0_mul_z0SubM)*B;
-		//const float t0_mul_z0SubM = t0*(z0 - M);
-		//const float t1_mul_z1SubM = t1*(z1 - M);
-		//const float t2_mul_z2SubM = t2*(z2 - M);
-		//float t_mul_zSubM = t0_mul_z0SubM + (t1_mul_z1SubM - t0_mul_z0SubM)*A + (t2_mul_z2SubM - t0_mul_z0SubM)*B;
-		//s = s0_mul_zSubM / (z - M);
-		//t = t_mul_zSubM / (z - M);
+		const float f =-100;//100
+		const float n = -0.1;//0.1
+		const float M =  f / (f - n);//1.11
+		const float s0_mul_z0SubM = s0*(z0 - M);
+		const float s1_mul_z1SubM = s1*(z1 - M);
+		const float s2_mul_z2SubM = s2*(z2 - M);
+		float s0_mul_zSubM = s0_mul_z0SubM + (s1_mul_z1SubM - s0_mul_z0SubM)*A + (s2_mul_z2SubM - s0_mul_z0SubM)*B;
+		const float t0_mul_z0SubM = t0*(z0 - M);
+		const float t1_mul_z1SubM = t1*(z1 - M);
+		const float t2_mul_z2SubM = t2*(z2 - M);
+		float t_mul_zSubM = t0_mul_z0SubM + (t1_mul_z1SubM - t0_mul_z0SubM)*A + (t2_mul_z2SubM - t0_mul_z0SubM)*B;
+		s = s0_mul_zSubM / (z - M);
+		t = t_mul_zSubM / (z - M);
 
 		//float p0w = v0.position.w; 
 		//float p1w = v1.position.w;
@@ -683,7 +685,7 @@ LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const L
 		//double zr = (1 - A - B)*(1 / p0w) + A*(1 / p1w) + B*(1 / p2w);
 		//s = (((1-A-B)*(s0/p0w)+A*(s1/p1w)+B*(s2/p2w))/zr)*texWidth;
 		//t = (((1 - A - B)*(t0 / p0w) + A*(t1 / p1w) + B*(t2 / p2w)) / zr)*texHeight;
-		////cout << "s:" << s << "   t:" << t << endl;
+		//cout << "s:" << s << "   t:" << t << endl;
 	}
 
 	float cal_w = (1 - A - B)*w0 + A*w1 + B*w2;
@@ -735,7 +737,7 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 	float z_inverse;
 	if (M == 0){//  p0p1//p0p2, p0p1p2 is degenerated tri, this may not happen, so no matter return what
 		//do nothing
-	}
+	} 
 	else{
 		A = -(y2suby0*xsubx0 - x2subx0*ysuby0) / M;
 		B = (y1suby0*xsubx0 - x1subx0*ysuby0) / M;
