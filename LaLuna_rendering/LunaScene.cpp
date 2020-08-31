@@ -9,9 +9,11 @@
 LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat,const LVert& v){
 	LVert temp_v=v;
 	//temp_v.position=
+	//float z = temp_v.position.c;
 	temp_v.position = modelMat*temp_v.position;
 	temp_v.position = viewMat*temp_v.position;
 	temp_v.position = projectionMat*temp_v.position;
+	//temp_v.position = temp_v.position / z;
 	return temp_v;
 
 }
@@ -174,7 +176,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(top, bottom_left, bottom_right, pixelCenter.a, pixelCenter.b,mode);
 			float zvalue_inbuffer = readZBuffer(j,i);
 			//cout << " zvalue_inbuffer" << zvalue_inbuffer << "/tearlyZoutput.m_z" << earlyZoutput.m_z << endl;
-			//if (earlyZoutput.m_z>zvalue_inbuffer){
+			if (earlyZoutput.m_z>zvalue_inbuffer){
 				int temp_textureHeight =m_texturelist[top.texture_ID]->m_Bmp->bmpHeight;
 				int temp_textureWidth = m_texturelist[top.texture_ID]->m_Bmp->bmpWidth;
 				//cout << "Height of the texture=" << temp_textureHeight << endl;
@@ -186,7 +188,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 			LVector4 cur_color = fragment.m_color;
 			drawPixel(hdc, j, i, cur_color);
 			writeZBuffer(j, i, earlyZoutput.m_z);
-			//}
+			}
 
 		}
 		left_x = left_x + left_dx;
@@ -218,7 +220,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 			LVector2 pixelCenter = LVector2(xInt + 0.5, yInt + 0.5);
 			LearlyZOutput earlyZoutput = interpolateInTri_inViewportSpace_Zvalue(low, top_left,top_right, pixelCenter.a, pixelCenter.b,mode);
 			float zvalue_inbuffer = readZBuffer(xInt, yInt);
-			//if (earlyZoutput.m_z > zvalue_inbuffer){
+			if (earlyZoutput.m_z > zvalue_inbuffer){
 				int temp_textureHeight = m_texturelist[low.texture_ID]->m_Bmp->bmpHeight;
 				int temp_textureWidth = m_texturelist[low.texture_ID]->m_Bmp->bmpWidth;
 				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight,mode);
@@ -230,7 +232,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 				drawPixel(hdc, xInt, yInt, cur_color);
 				
 				writeZBuffer(xInt, yInt, earlyZoutput.m_z);
-			//}
+			}
 
 
 		}
@@ -454,9 +456,9 @@ void LunaScene::makecubemesh(){
 
 	}
 	for (int i = 0; i < temp_position_list.size(); i++){
-		temp_position_list[i].a *= 5; temp_position_list[i].array[0] *= 5;
-		temp_position_list[i].b *= 5; temp_position_list[i].array[1] *= 5;
-		temp_position_list[i].c *= 5; temp_position_list[i].array[2] *= 5;
+		temp_position_list[i].a /= 5; temp_position_list[i].array[0] /= 5;
+		temp_position_list[i].b /= 5; temp_position_list[i].array[1] /= 5;
+		temp_position_list[i].c /= 5; temp_position_list[i].array[2] /= 5;
 	}
 	m_mesh->mesh_positionlist = temp_position_list;
 	m_mesh->mesh_orth_z.resize(temp_position_list.size());
@@ -497,7 +499,7 @@ LMatrix4 LunaScene::initModelMatrix(){
 	//LMatrix4 temp_model_mat = temp_scale_mat*temp_trans_mat;
 	//LMatrix4 temp_model_mat = temp_rotate_mat*temp_model_mat;
 	LMatrix4 temp_model_mat;
-	temp_model_mat = temp_rotate_mat2;
+	temp_model_mat = temp_rotate_mat1;
 	return temp_model_mat;
 	//LMatrix4 temp_mat=calculateRotateMatrix()
 
@@ -521,44 +523,36 @@ LMatrix4 LunaScene::initViewMatrix(){
 	return m_viewMat;
 }
 LMatrix4 LunaScene::initProjectionMatrix(LunaProjectionMode mode){
-
-
-	float fov=45.0;//cot(fov)=2n/h
+	float fov = 45;//cot(fov)=2n/h
 	float respect=1.0;//width_view/height_view
 	float width_see;
 	float height_see;
-	height_see = 100;
+	height_see = 200;
 
 	float r, l, t, b, n, f;
 	l = b = -50;
 	r = t = 50;
-	n = 10;//mutipul -1;
+	n = 0.1;//mutipul -1;
 	f = 100;//multiple -1;
 	if (mode == lunaPerspectivepromode){  
-
-
-
 		float tan_fov_2 = tan((fov / 2.0)*(PI / 180));
+		//cout << tan_fov_2 << endl;
 		float t11 = 1 / (respect*tan_fov_2);
 		float t22 = 1 / tan_fov_2;
 		float t33 = -(f + n) / (f - n);
 		float t34 = -(2 * n * f) / (f - n);
-
 		LMatrix4 temp_proj(
 			t11, 0, 0, 0,
 			0, t22, 0, 0,
 			0, 0, t33, 1,
 			0, 0, t34, 0
 			);
-
-
 		return temp_proj;
 	}
 	else{
 		width_see = respect*height_see;
 		n = n*(-1);
 		f = f*(-1);
-
 		float t11 = 2 /width_see ;
 		float t22 = 2/ height_see;
 		float t33 = 2/ (n - f);
@@ -569,6 +563,13 @@ LMatrix4 LunaScene::initProjectionMatrix(LunaProjectionMode mode){
 			0, 0, t33, 0,
 			0, 0, t34, 1
 			);
+		//LMatrix4 temp_per2or(
+		//	n, 0, 0, 0,
+		//	0, n, 0, 0,
+		//	0, 0, n + f, 1,
+		//	0, 0, -n*f, 0
+		//	);
+		//temp_proj = temp_proj*temp_per2or;
 		return temp_proj;
 
 	}
@@ -739,11 +740,13 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 		A = -(y2suby0*xsubx0 - x2subx0*ysuby0) / M;
 		B = (y1suby0*xsubx0 - x1subx0*ysuby0) / M;
 		//----calculate z
-		if(mode==lunaOrthogonalpromode)z = z0 + (z1 - z0)*A + (z2 - z0)*B;
-		else{
-			z_inverse = (1 - A - B)*z0_inverse + A*z1_inverse + B*z2_inverse;
-			z = 1 / z_inverse;
-		}
+		//if(mode==lunaOrthogonalpromode)
+			//z = 1/z0_inverse + (1/z1_inverse - 1/z0_inverse)*A + (1/z2_inverse - 1/z0_inverse)*B;
+			z = z0 + (z1-z0)*A + (z2-z0)*B;
+		//else{
+		//	z_inverse = (1 - A - B)*z0_inverse + A*z1_inverse + B*z2_inverse;
+		//	z = 1 / z_inverse;
+		//}
 
 	}
 
