@@ -22,14 +22,48 @@ public:
 	}
 
 	~LVector2(){};
+
+public:
 	float array[2];
 	float a;
 	float b;
 
 	float getA(){ return a; }
 	float getB(){ return b; }
-};
+	LVector2 operator* (float k);
+	LVector2 operator/ (float k);
+	LVector2 operator+ (LVector2 temp_A);
+	LVector2 operator-(LVector2 temp_B);
+ };
+class LVector3{
+public:
+	LVector3(){};
+	LVector3(float temp[3]){
+		for (int i = 0; i < 3; i++){
+			array[i] = temp[i];
+		}
+	}
+	LVector3(float t1,float t2,float t3){
+		array[0] = t1;
+		array[1] = t2;
+		array[2] = t3;
 
+	};
+
+	LVector3(const LVector3& temp){
+		for (int i = 0; i < 3; i++){
+			array[i] = temp.array[i];
+		}
+	}
+	~LVector3(){};
+
+public:
+	float array[3];
+public:
+	LVector3 operator-(const LVector3& vector3_B);
+	LVector3 operator /(float k);
+
+};
 class LVector4{
 public:
 	LVector4(){};

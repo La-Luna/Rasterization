@@ -227,11 +227,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//double render buffer?
 
 		//rasteration
-		scene->softRasterization(hdc_back_buffer);
-
+		cout << "while" << endl;
+		scene->softRasterization(hdc_back_buffer);			
 		BitBlt(ps.hdc, 0, 0, cxClient, cyClient, hdc_back_buffer, 0,0, SRCCOPY);
 		EndPaint(hWnd, &ps);
 		
+	}
+	break;
+	case WM_MOUSEMOVE:
+	{
+		scene->m_camera->updateVector();
+		InvalidateRect(hWnd, NULL, false);
 	}
 	break;
 	case WM_DESTROY:

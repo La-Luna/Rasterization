@@ -1,54 +1,38 @@
-﻿Build started 2020/8/31 22:17:27.
+﻿Build started 2020/9/1 22:44:54.
      1>Project "D:\C++learning\LaLuna_rendering\LaLuna_rendering\LaLuna_rendering.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LunaScene.cpp
-         LunaScene.cpp
-     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(31): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(33): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(39): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\ltexture.h(41): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(31): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(158): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(159): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(170): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(171): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(175): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(177): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(190): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(206): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(207): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(216): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(217): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(221): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(223): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(234): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(251): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(252): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(253): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(254): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(460): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(499): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(500): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(530): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(535): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(540): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(532): warning C4101: 'width_n' : unreferenced local variable
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(622): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(668): warning C4305: 'initializing' : truncation from 'double' to 'const float'
-     1>d:\c++learning\laluna_rendering\laluna_rendering\lunascene.cpp(737): warning C4101: 'z_inverse' : unreferenced local variable
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\LaLuna_rendering.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LunaCamera.cpp
+         LunaCamera.cpp
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(11): warning C4305: '=' : truncation from 'double' to 'float'
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(62): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(67): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(59): warning C4101: 'width_n' : unreferenced local variable
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(111): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(113): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\c++learning\laluna_rendering\laluna_rendering\lunacamera.cpp(114): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
      1>d:\c++learning\laluna_rendering\laluna_rendering\funcs.h(40): warning C4715: 'sortfromHigh2Low' : not all control paths return a value
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.lib" /MACHINE:X86 Debug\LaLuna_rendering.res
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe" /INCREMENTAL /NOLOGO /FORCE:MULTIPLE kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.lib" /MACHINE:X86 Debug\LaLuna_rendering.res
          Debug\LaLuna_rendering.obj
          Debug\LMatrix.obj
          Debug\LMesh.obj
          Debug\LTexture.obj
+         Debug\LunaCamera.obj
          Debug\LunaScene.obj
          Debug\LVector.obj
          Debug\LVert.obj
          Debug\readBmp.obj
          Debug\stdafx.obj
-         LINK : D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe not found or not built by the last incremental link; performing full link
+     1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/FORCE' specification
+     1>LaLuna_rendering.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>LunaScene.obj : warning LNK4006: "float __cdecl Vector3Length(class LVector3,class LVector3)" (?Vector3Length@@YAMVLVector3@@0@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "class LVert __cdecl calculateMiddle2inTri(class LVert,class LVert,float)" (?calculateMiddle2inTri@@YA?AVLVert@@V1@0M@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "class LVector3 __cdecl crossVector3(class LVector3,class LVector3)" (?crossVector3@@YA?AVLVector3@@V1@0@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "double __cdecl lineInsertWithHorizontalLine(class LVector4 const &,class LVector4 const &,double)" (?lineInsertWithHorizontalLine@@YANABVLVector4@@0N@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "class LVector3 __cdecl normalizeVector3(class LVector3)" (?normalizeVector3@@YA?AVLVector3@@V1@@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "class LVector4 __cdecl perComponentProduct(class LVector4 const &,class LVector4 const &)" (?perComponentProduct@@YA?AVLVector4@@ABV1@0@Z) already defined in LunaCamera.obj; second definition ignored
+     1>LunaScene.obj : warning LNK4006: "class std::vector<int,class std::allocator<int> > __cdecl sortfromHigh2Low(float,float,float)" (?sortfromHigh2Low@@YA?AV?$vector@HV?$allocator@H@std@@@std@@MMM@Z) already defined in LunaCamera.obj; second definition ignored
+     1>D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
          LaLuna_rendering.vcxproj -> D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe
        PostBuildEvent:
          editbin/subsystem:console D:\C++learning\LaLuna_rendering\Debug\LaLuna_rendering.exe
@@ -61,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.82
+Time Elapsed 00:00:00.67

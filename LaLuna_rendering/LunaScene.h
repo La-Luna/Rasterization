@@ -7,6 +7,7 @@
 #include "myDefine.h"
 #include"LTexture.h"
 #include"LVector.h"
+#include "LunaCamera.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
 LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
 LFrag fragmentShaderProgram(const LVert& interpolateV,const LTexture* texture);
@@ -27,9 +28,12 @@ public:
 	LMesh* m_mesh;			//save the original mesh datas
 	LMesh* transformed_mesh;//save the transformed mesh datas
 
+	//camera
+	LunaCamera* m_camera;
 	
-	
-	void makecubemesh();
+	//init
+	void init(LVector4 viewport);
+
 
 	//viewport_matrix
 	LVector4 m_viewport;
@@ -45,10 +49,9 @@ public:
 
 
 	//create a viewport matrix
-
-
 	void calculateViewportMatrix(LVector4 viewport);
-	LVert interpolate_inViewportSpace(const LVert& v1, const LVert&v2, float x, float y);
+	LVert interpolate_inViewportSpace(const LVert& v1, const LVert&v2, float x, float y,LunaProjectionMode mode);
+
 	//ztest
 	double* z_test_buffer;
 	LearlyZOutput interpolateInTri_inViewportSpace_Zvalue(const LVert&v0, const LVert&v1, const LVert&v2, float xp, float yp, LunaProjectionMode mode);
@@ -56,8 +59,9 @@ public:
 	void clearZBuffer();
 	double readZBuffer(int x_pixel, int y_pixel);
 	void writeZBuffer(int x_pixel, int y_pixel, double z_value);
+
 	//draw mesh fucntions
-	void init(LVector4 viewport);
+	void makecubemesh();
 	void makeSimpleTriangle();
 	void makeSimpleCube();
 	void softRasterization(HDC hdc);

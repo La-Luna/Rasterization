@@ -1,8 +1,49 @@
 #include"stdafx.h"
 #include"LVector.h"
+#include <cmath>
 #include<iostream>
 using namespace std;
+LVector2 LVector2::operator* (float k){
+	float temp_a = array[0] * k;
+	float temp_b = array[1] * k;
+	LVector2 temp(temp_a, temp_b);
+	return temp;
+}
+LVector2 LVector2::operator/ (float k){
+	 ////k==0ÈçºÎ±¨´í£¿
+	float temp_a = array[0] / k;
+	float temp_b = array[1] / k;
+	LVector2 temp(temp_a, temp_b);
+	return temp;
 
+}
+LVector2 LVector2::operator+ (LVector2 temp_A){
+	float temp_a = a + temp_A.a;
+	float temp_b = b + temp_A.b;
+	LVector2 temp(temp_a, temp_b);
+	return temp;
+}
+LVector2 LVector2::operator-(LVector2 temp_B){
+	float temp_a, temp_b;
+	temp_a = a - temp_B.a;
+	temp_b = b - temp_B.b;
+	LVector2 temp(temp_a, temp_b);
+	return temp;
+}
+LVector3 LVector3::operator-(const LVector3& vector3_B){
+	float temp_arr[3];
+	for (int i = 0; i < 3; i++){
+		temp_arr[i] = array[i] - vector3_B.array[i];
+	}
+	LVector3 ans(temp_arr);
+	return ans;
+}
+LVector3 LVector3::operator /(float k){
+	for (int i = 0; i < 3; i++){
+		array[i] /= k;
+	}
+	return *this;
+}
 LVector4::LVector4(float a0, float b0, float c0, float d0){
 	a= a0;
 	b = b0;

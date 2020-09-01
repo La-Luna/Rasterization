@@ -56,6 +56,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
     </Link>
     <PostBuildEvent>
       <Command>editbin/subsystem:console $(OutDir)$(ProjectName).exe</Command>
@@ -87,6 +88,7 @@
     <ClInclude Include="LMesh.h" />
     <ClInclude Include="LTexture.h" />
     <ClInclude Include="LTriangle.h" />
+    <ClInclude Include="LunaCamera.h" />
     <ClInclude Include="LunaGLMath.h" />
     <ClInclude Include="LunaScene.h" />
     <ClInclude Include="LVector.h" />
@@ -103,6 +105,7 @@
     <ClCompile Include="LMatrix.cpp" />
     <ClCompile Include="LMesh.cpp" />
     <ClCompile Include="LTexture.cpp" />
+    <ClCompile Include="LunaCamera.cpp" />
     <ClCompile Include="LunaScene.cpp" />
     <ClCompile Include="LVector.cpp" />
     <ClCompile Include="LVert.cpp" />

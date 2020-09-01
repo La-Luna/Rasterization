@@ -81,5 +81,36 @@ LVector4 perComponentProduct(const LVector4&v0, const LVector4&v1){
 		);
 	return temp;
 }
+
+float Vector3Length(LVector3 temp1, LVector3 temp2){
+	float ans = 0;
+	float t1;
+	for (int i = 0; i < 3; i++){
+		t1 = temp1.array[i] - temp2.array[i];
+		t1 *= t1;
+		ans += t1;
+	}
+	ans = std::sqrt(ans);
+	return ans;
+
+}
+LVector3 normalizeVector3(LVector3 temp){
+	//1
+	float module = sqrt(temp.array[0] * temp.array[0] + temp.array[1] * temp.array[1] + temp.array[2] * temp.array[2]);
+
+
+	//2
+	temp = temp / module;
+	return temp;
+
+}
+LVector3 crossVector3(LVector3 temp1, LVector3 temp2){
+	float t1=temp1.array[1]*temp2.array[2]-temp1.array[2]*temp2.array[1];
+	float t2 = -(temp1.array[0] * temp2.array[2] - temp1.array[2] * temp2.array[0]);
+	float t3 = temp1.array[0] * temp2.array[1] - temp1.array[1] * temp2.array[0];
+	LVector3 ans(t1, t2, t3);
+	return ans;
+}
+
 #endif
 
