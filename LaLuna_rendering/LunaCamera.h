@@ -21,6 +21,7 @@ public:
 	LVector3 getNvector()const{ return m_N; }
 	LMatrix4 getViewMat()const{ return m_ViewMat; }
 	LMatrix4 getProjectionMat()const { return m_ProjectionMat; }
+	void setm_N(float myawn,float mpitch);
 	void updateVector();
 	void updateMatrix(LunaProjectionMode mode);
 	void initViewMatrix();

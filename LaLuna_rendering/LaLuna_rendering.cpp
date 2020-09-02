@@ -236,8 +236,48 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_MOUSEMOVE:
 	{
+
 		scene->m_camera->updateVector();
 		InvalidateRect(hWnd, NULL, false);
+		//float myawn, mpitch;
+		//int cur_x = LOWORD(lParam);
+		//int cur_y = HIWORD(lParam);
+		//lastmousPos = curmousePos;
+		//curmousePos=LVector2(cur_x, cur_y);
+
+		//if (pushleftbutton){
+		//float dx = cur_x - lastmousPos.a;
+		//float dy = cur_y - lastmousPos.b;
+
+		//myawn = -dx;
+		//mpitch = -dy;
+		//cout << "myawn" << myawn << endl;
+		//cout << "mpitch" << mpitch << endl;
+		//scene->m_camera->setm_N(myawn, mpitch);
+		//InvalidateRect(hWnd, NULL, false);
+		//}
+	}
+	break;
+	case WM_LBUTTONDOWN:
+	{
+
+		int cur_x = LOWORD(lParam);
+		int cur_y = HIWORD(lParam);
+
+		lastmousPos = curmousePos;
+		curmousePos = LVector2(cur_x, cur_y);
+		pushleftbutton = true;
+	}
+	break;
+	case WM_LBUTTONUP:
+	{
+		int cur_x = LOWORD(lParam);
+		int cur_y = HIWORD(lParam);
+
+		lastmousPos = curmousePos;
+		curmousePos = LVector2(cur_x, cur_y);
+
+		pushleftbutton = false;
 	}
 	break;
 	case WM_DESTROY:

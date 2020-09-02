@@ -2,6 +2,7 @@
 #include"LunaScene.h"
 #include "LunaGLMath.h"
 #include "funcs.h"
+#include <time.h>
 #define PI 3.1415926
 //LunaScene* scene = NULL;
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
@@ -56,12 +57,13 @@ void LunaScene::initZBuffer(){
 	}
 }
 void LunaScene::softRasterization(HDC hdc){
+
 	cout << "run into LunaScene::softRasterization(HDC hdc)" << endl;
 	//clear zBuffer
 	clearZBuffer();
 	//initiate the model matrix and view matrix
 	m_modelMat = initModelMatrix();
-	m_camera->updateMatrix(lunaPerspectivepromode);
+	m_camera->updateMatrix(lunaOrthogonalpromode);
 	//m_viewMat = initViewMatrix();
 	//m_projectionMat =initProjectionMatrix(lunaPerspectivepromode);
 
@@ -71,7 +73,8 @@ void LunaScene::softRasterization(HDC hdc){
 	//cout << "run out transformVertixes()" << endl;
 
 	//raster the triangle
-	//actually the model consists of many triangles,now we only try to render one of them. 
+	//actually the model consists of many triangles,now we only try to render one of them.
+
 	int nums_triangles = transformed_mesh->mesh_triangleslist.size();
 	for (int i = 0; i < nums_triangles; i++){
 		LTriangle & IDtri = transformed_mesh->mesh_triangleslist[i];
@@ -81,7 +84,7 @@ void LunaScene::softRasterization(HDC hdc){
 		LVert v0=transformed_mesh->getVert(v0ID);
 		LVert v1=transformed_mesh->getVert(v1ID);
 		LVert v2=transformed_mesh->getVert(v2ID);
-		fillTriangleSolid(hdc,v0,v1,v2,lunaPerspectivepromode);
+		fillTriangleSolid(hdc,v0,v1,v2,lunaOrthogonalpromode);
 		//cout << "v0:" << v0.position.a << "," << v0.position.b << "," << v0.position.c << "," << v0.position.d<<endl;
 		//cout << "v1:" << v1.position.a << "," << v1.position.b << "," << v1.position.c << "," << v1.position.d<<endl;
 		//cout << "v2:" << v2.position.a << "," << v2.position.b << "," << v2.position.c << "," << v2.position.d<<endl;
@@ -151,7 +154,7 @@ void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, con
 
 }
 void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bottom_left, const LVert& bottom_right, LunaProjectionMode mode){
-
+	clock_t lasttime = clock();
 	float yTop = top.position.b;
 	float yBottom = bottom_left.position.b;
 
@@ -163,7 +166,9 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b  - (double)bottom_right.position.b);//+?+?-
 	double left_x = lineInsertWithHorizontalLine(top.position, bottom_left.position, (double)(yBottom + 0.5));
 	double right_x = lineInsertWithHorizontalLine(top.position, bottom_right.position, (double)(yBottom + 0.5));
-
+	clock_t curtime = clock();
+	double runtime = (curtime - lasttime) / (double)CLOCKS_PER_SEC;
+	cout << "runtime is " << runtime << endl;
 
 	for (int i = yBottomInt; i <= yTopInt; i++){
 
@@ -504,7 +509,7 @@ void LunaScene::makeSimpleCube(){
 
 	makecubemesh();
 	LTexture* cubetexture = new LTexture();
-	string texFileName = "cutedog.bmp";
+	string texFileName = "tex.bmp";
 	bool success = cubetexture->initwithFile(texFileName.c_str());
 	m_texturelist.push_back(cubetexture);
 
@@ -654,6 +659,7 @@ void LunaScene::calculateViewportMatrix(LVector4 viewport){
 
 }
 LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const LVert& v1, const LVert&v2, const LearlyZOutput& earlyOutput, int texWidth, int texHeight, LunaProjectionMode mode){
+
 	const float A = earlyOutput.m_A;
 	const float B = earlyOutput.m_B;
 	const float x = earlyOutput.m_x;
@@ -857,10 +863,15 @@ LearlyZOutput LunaScene::interpolateInTri_inViewportSpace_Zvalue(const LVert&v0,
 	//return ans;
 
 }
+void LunaScene::test01(){
+	//cout << "pixel:(" << x_pixel << "," << y_pixel << ")	z_value:" << z_test_buffer[x_pixel*screen_width + y_pixel] << endl;
+	cout << "winter is coming!" << endl;
+}
 double LunaScene::readZBuffer(int x_pixel, int y_pixel){
 	int screen_width = (int)m_viewport.c;
 	int screen_height = (int)m_viewport.d;
-	if (x_pixel >= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
+	if (x_pixel>= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
+		if (x_pixel >=740)test01();
 		return z_test_buffer[x_pixel*screen_width + y_pixel];
 	}
 	return -1;//just  a test!
@@ -869,6 +880,7 @@ void LunaScene::writeZBuffer(int x_pixel, int y_pixel, double z_value){
 	int screen_width = (int)m_viewport.c;
 	int screen_height = (int)m_viewport.d;
 	if (x_pixel >= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
+		if(z_value>10)cout <<"pixel:("<<x_pixel<< ","<<y_pixel<<")	z_value:" << z_value << endl;
 		z_test_buffer[x_pixel*screen_width + y_pixel]=z_value;
 	}
 

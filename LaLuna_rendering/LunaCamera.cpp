@@ -131,3 +131,25 @@ void LunaCamera::updateMatrix(LunaProjectionMode mode){
 	initViewMatrix();
 	initProjectionMatrix(mode);
 }
+void LunaCamera::setm_N(float myawn, float mpitch){
+	//if (myawn <= -180)myawn = -180.0;
+	//if (myawn >= 180.0)myawn = 180.0;
+	//if (mpitch <= -90.0)mpitch = -90.0;
+	//if (mpitch >= 90.0)mpitch = 90.0;
+
+	if (myawn <= -90)myawn = -90.0;
+	if (myawn >= 90.0)myawn = 90.0;
+	if (mpitch <= -45.0)mpitch = -45.0;
+	if (mpitch >= 45.0)mpitch = 45.0;
+	float tx = cos(mpitch*(PI / 180))*cos(myawn*(PI / 180));
+	float ty = sin(mpitch*(PI / 180));
+	float tz = cos(mpitch*(PI / 180))*sin(myawn*(PI / 180));
+
+	LVector3 tempN(tx, ty, tz);
+	m_N =m_N+ tempN;
+	m_N = normalizeVector3(m_N);
+	m_U = crossVector3(m_V, m_N);
+	m_U = normalizeVector3(m_U);
+	m_V = crossVector3(m_N, m_U);
+	m_V = normalizeVector3(m_V);
+}

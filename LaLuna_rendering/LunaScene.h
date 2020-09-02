@@ -82,6 +82,8 @@ public:
 	//model view projetcion viewport...
 	void transformVertixes();
 
+
+	void  test01();
 };
 #endif
 

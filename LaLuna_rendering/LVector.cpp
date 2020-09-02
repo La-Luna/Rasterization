@@ -44,6 +44,15 @@ LVector3 LVector3::operator /(float k){
 	}
 	return *this;
 }
+LVector3 LVector3::operator+(const LVector3& vector3_B){
+	float temp_arr[3];
+	for (int i = 0; i < 3; i++){
+		temp_arr[i] = array[i] + vector3_B.array[i];
+	}
+	LVector3 ans(temp_arr);
+	return ans;
+
+}
 LVector4::LVector4(float a0, float b0, float c0, float d0){
 	a= a0;
 	b = b0;

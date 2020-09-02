@@ -62,6 +62,7 @@ public:
 public:
 	LVector3 operator-(const LVector3& vector3_B);
 	LVector3 operator /(float k);
+	LVector3 operator+(const LVector3& vector3_B);
 
 };
 class LVector4{
