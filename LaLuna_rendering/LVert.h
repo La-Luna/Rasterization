@@ -16,6 +16,7 @@ public:
 	LVector4 color;
 	LVector2 texcoord;
 	int texture_ID;
+	LVector4 vertnomal;
 };
 
 

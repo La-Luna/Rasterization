@@ -22,6 +22,7 @@ public:
 	LMatrix4 getViewMat()const{ return m_ViewMat; }
 	LMatrix4 getProjectionMat()const { return m_ProjectionMat; }
 	void setm_N(float myawn,float mpitch);
+	void setEyePos(const LVector3&neweyepos){ m_eyePos = neweyepos; }
 	void updateVector();
 	void updateMatrix(LunaProjectionMode mode);
 	void initViewMatrix();

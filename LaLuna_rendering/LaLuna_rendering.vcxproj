@@ -90,6 +90,7 @@
     <ClInclude Include="LTriangle.h" />
     <ClInclude Include="LunaCamera.h" />
     <ClInclude Include="LunaGLMath.h" />
+    <ClInclude Include="LunaLight.h" />
     <ClInclude Include="LunaScene.h" />
     <ClInclude Include="LVector.h" />
     <ClInclude Include="LVert.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="LMesh.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="LunaCamera.cpp" />
+    <ClCompile Include="LunaLight.cpp" />
     <ClCompile Include="LunaScene.cpp" />
     <ClCompile Include="LVector.cpp" />
     <ClCompile Include="LVert.cpp" />

@@ -18,11 +18,22 @@ LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, cons
 	return temp_v;
 
 }
-LFrag fragmentShaderProgram(const LVert& interpolateV, const LTexture* texture){
+LFrag fragmentShaderProgram( LVert& interpolateV, LTexture* texture,LunaLight* light){
+	float ambientStrength = 0.1;
+	LVector4 lightColor = LVector4(1, 1, 1,0);
+	LVector4 ambient =lightColor*ambientStrength;
+	LVector4 temp_vert = normalizeVector4(interpolateV.position);
+	LVector4 lightdirection = light->light_pos - temp_vert;
+	lightdirection = normalizeVector4(lightdirection);
+	 
+	float diffusecoso = 0.3*max(dot2vector4(lightdirection, interpolateV.vertnomal),0.0);
+ 	LVector4 diffuse = lightColor*diffusecoso;
+
+
 	LFrag tempfrag;
 	tempfrag.m_position = interpolateV.position;
-	tempfrag.m_color = interpolateV.color;
-	tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
+	tempfrag.m_color = interpolateV.color + ambient+diffuse;
+	//tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
 	return tempfrag;
 }
 LunaScene::~LunaScene(){
@@ -41,6 +52,10 @@ void LunaScene::init(LVector4 viewport){
 	calculateViewportMatrix(viewport);
 	initZBuffer();
 	clearZBuffer();
+
+	//create a light
+	m_light = new LunaLight;
+	m_light->setLightPos(10, 10, 0, 0);
 
 	//create mesh
 	m_mesh = new LMesh();
@@ -64,8 +79,8 @@ void LunaScene::softRasterization(HDC hdc){
 	//initiate the model matrix and view matrix
 	m_modelMat = initModelMatrix();
 	m_camera->updateMatrix(lunaOrthogonalpromode);
-	//m_viewMat = initViewMatrix();
-	//m_projectionMat =initProjectionMatrix(lunaPerspectivepromode);
+
+
 
 	*transformed_mesh = *m_mesh;
 	//transforn vertixes coordinates to viewport coordinates
@@ -189,7 +204,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 				//cout << "Width of the texture=" << temp_textureWidth << endl;
 			LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(top, bottom_left, bottom_right, earlyZoutput, temp_textureWidth,temp_textureHeight,mode);
 			//fragment process
-			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
+			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID],m_light);
 				
 			LVector4 cur_color = fragment.m_color;
 			drawPixel(hdc, j, i, cur_color);
@@ -233,7 +248,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight,mode);
 
 				//fragment shader
-				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
+				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID],m_light);
 
 				LVector4 cur_color = fragment.m_color;
 				drawPixel(hdc, xInt, yInt, cur_color);
@@ -297,7 +312,7 @@ void LunaScene::makecubemesh(){
 	vector<LVector4> temp_position_list;
 	vector<LVector4> temp_pos_color_list;
 	vector<LTriangle> temp_tri_ID_list;
-
+	vector<LVector4> temp_normal_list;
 	//front face
 	{
 		temp_position_list.push_back(LVector4(5, 5, 5, 1)); int vID0 = temp_position_list.size() - 1;//0
@@ -329,7 +344,10 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
 
-
+		temp_normal_list.push_back(LVector4(0, 0, 1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, 1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, 1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, 1, 0));
 	}
 	//back face
 	{
@@ -362,6 +380,11 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(1, 0));
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
+
+		temp_normal_list.push_back(LVector4(0, 0, -1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, -1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, -1, 0));
+		temp_normal_list.push_back(LVector4(0, 0, -1, 0));
 	}
 	//right face
 	{
@@ -395,6 +418,10 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
 
+		temp_normal_list.push_back(LVector4(1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(1, 0, 0, 0));
 	}
 	//left face
 	{
@@ -427,6 +454,10 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
 
+		temp_normal_list.push_back(LVector4(-1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(-1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(-1, 0, 0, 0));
+		temp_normal_list.push_back(LVector4(-1, 0, 0, 0));
 	}
 	//up face
 	{
@@ -459,6 +490,10 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
 
+		temp_normal_list.push_back(LVector4(0, 1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, 1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, 1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, 1, 0, 0));
 	}
 	//down face
 	{
@@ -490,6 +525,11 @@ void LunaScene::makecubemesh(){
 		textureCoordlist.push_back(LVector2(1, 0));
 		textureCoordlist.push_back(LVector2(0, 0));
 		textureCoordlist.push_back(LVector2(0, 1));
+		
+		temp_normal_list.push_back(LVector4(0, -1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, -1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, -1, 0, 0));
+		temp_normal_list.push_back(LVector4(0, -1, 0, 0));
 
 	}
 	for (int i = 0; i < temp_position_list.size(); i++){
@@ -502,6 +542,7 @@ void LunaScene::makecubemesh(){
 	m_mesh->mesh_pointscolorlist = temp_pos_color_list;
 	m_mesh->mesh_triangleslist = temp_tri_ID_list;
 	m_mesh->mesh_texcoordlist = textureCoordlist;
+	m_mesh->mesh_normalist = temp_normal_list;
 
 }
 void LunaScene::makeSimpleCube(){
@@ -746,7 +787,7 @@ LVert LunaScene::interpolate_inViewportSpace_otherAttrib(const LVert&v0, const L
 	LVector4 cal_color = color0*(1 - A - B) + color1*A + color2*B;
 
 	LVector4 t_lv4(x, y, z, cal_w);
-	LVert temp;
+	LVert temp=v0;
 	temp.color = cal_color;
 	temp.position = t_lv4;
 	temp.texcoord = { s, t };
@@ -871,8 +912,9 @@ double LunaScene::readZBuffer(int x_pixel, int y_pixel){
 	int screen_width = (int)m_viewport.c;
 	int screen_height = (int)m_viewport.d;
 	if (x_pixel>= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
-		if (x_pixel >=740)test01();
-		return z_test_buffer[x_pixel*screen_width + y_pixel];
+		//if (x_pixel >=740)test01();
+		double ans = z_test_buffer[y_pixel*screen_width + x_pixel];
+		return ans;
 	}
 	return -1;//just  a test!
 }
@@ -881,7 +923,7 @@ void LunaScene::writeZBuffer(int x_pixel, int y_pixel, double z_value){
 	int screen_height = (int)m_viewport.d;
 	if (x_pixel >= 0 && x_pixel < screen_width&&y_pixel >= 0 && y_pixel < screen_height){
 		if(z_value>10)cout <<"pixel:("<<x_pixel<< ","<<y_pixel<<")	z_value:" << z_value << endl;
-		z_test_buffer[x_pixel*screen_width + y_pixel]=z_value;
+		z_test_buffer[y_pixel*screen_width + x_pixel]=z_value;
 	}
 
 }

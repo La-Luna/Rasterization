@@ -53,6 +53,15 @@ LVector3 LVector3::operator+(const LVector3& vector3_B){
 	return ans;
 
 }
+LVector3 LVector3::operator*(float k){
+	float temp_arr[3];
+	temp_arr[0] = array[0] * k;
+	temp_arr[1] = array[1] * k;
+	temp_arr[2] = array[2] * k;
+
+	LVector3 ans(temp_arr);
+	return ans;
+}
 LVector4::LVector4(float a0, float b0, float c0, float d0){
 	a= a0;
 	b = b0;
@@ -81,6 +90,15 @@ LVector4 LVector4::operator+(LVector4 lv){
 	temp.array[2] = this->array[2] + lv.array[2]; temp.c = temp.array[2];
 	temp.array[3] = this->array[3] + lv.array[3]; temp.d = temp.array[3];
 	return temp;
+}
+LVector4 LVector4::operator-(LVector4 lv){
+	float temp_arr[4];
+	for (int i = 0; i < 4; i++){
+		temp_arr[i] =array[i]- lv.array[i];
+	}
+
+	LVector4 ans(temp_arr[0],temp_arr[1],temp_arr[2],temp_arr[3]);
+	return ans;
 }
 float LVector4::operator*(const LVector4& a){
 	float ans=0;

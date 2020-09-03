@@ -237,25 +237,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 	{
 
-		scene->m_camera->updateVector();
-		InvalidateRect(hWnd, NULL, false);
-		//float myawn, mpitch;
-		//int cur_x = LOWORD(lParam);
-		//int cur_y = HIWORD(lParam);
-		//lastmousPos = curmousePos;
-		//curmousePos=LVector2(cur_x, cur_y);
-
-		//if (pushleftbutton){
-		//float dx = cur_x - lastmousPos.a;
-		//float dy = cur_y - lastmousPos.b;
-
-		//myawn = -dx;
-		//mpitch = -dy;
-		//cout << "myawn" << myawn << endl;
-		//cout << "mpitch" << mpitch << endl;
-		//scene->m_camera->setm_N(myawn, mpitch);
+		//scene->m_camera->updateVector();
 		//InvalidateRect(hWnd, NULL, false);
-		//}
+		float myawn, mpitch;
+		int cur_x = LOWORD(lParam);
+		int cur_y = HIWORD(lParam);
+		lastmousPos = curmousePos;
+		curmousePos = LVector2(cur_x, cur_y);
+
+		if (pushleftbutton){
+			float dx = cur_x - lastmousPos.a;
+			float dy = cur_y - lastmousPos.b;
+
+			myawn = -dx;
+			mpitch = -dy;
+			cout << "myawn" << myawn << endl;
+			cout << "mpitch" << mpitch << endl;
+			scene->m_camera->setm_N(myawn, mpitch);
+			InvalidateRect(hWnd, NULL, false);
+		}
 	}
 	break;
 	case WM_LBUTTONDOWN:
@@ -280,6 +280,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		pushleftbutton = false;
 	}
 	break;
+
 	case WM_DESTROY:
 	{
 
@@ -291,6 +292,47 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 		break;
+	case WM_KEYDOWN:
+	{
+		switch (wParam){
+
+		case 87://w
+		{
+			LVector3 delta = scene->m_camera->getVvector()*(-0.1);
+			delta = delta + scene->m_camera->getEyePos();
+
+			//cout << "new eye pos:" << delta.array[0] << "," << delta.array[1] << "," << delta.array[2] << endl;
+			scene->m_camera->setEyePos(delta);
+			InvalidateRect(hWnd, NULL, false);
+		}
+		break;
+		case 83://s
+		{
+			LVector3 delta = scene->m_camera->getVvector()*(0.1);
+			delta = delta + scene->m_camera->getEyePos();
+			scene->m_camera->setEyePos(delta);
+			InvalidateRect(hWnd, NULL, false);
+		}
+		break;
+		case 65://a
+		{
+			LVector3 delta = scene->m_camera->getUvector()*(0.1);
+			delta = delta + scene->m_camera->getEyePos();
+			scene->m_camera->setEyePos(delta);
+			InvalidateRect(hWnd, NULL, false);
+		}
+		break;
+		case 68://d
+		{
+			LVector3 delta = scene->m_camera->getUvector()*(-0.1);
+			delta = delta + scene->m_camera->getEyePos();
+			scene->m_camera->setEyePos(delta);
+			InvalidateRect(hWnd, NULL, false);
+		}
+		break;
+		}
+
+	}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

@@ -8,9 +8,10 @@
 #include"LTexture.h"
 #include"LVector.h"
 #include "LunaCamera.h"
+#include "LunaLight.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
 LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
-LFrag fragmentShaderProgram(const LVert& interpolateV,const LTexture* texture);
+LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture, LunaLight* light);
 
 class LunaScene;
 extern LunaScene* scene;
@@ -31,6 +32,10 @@ public:
 	//camera
 	LunaCamera* m_camera;
 	
+
+	//light
+	LunaLight* m_light;
+
 	//init
 	void init(LVector4 viewport);
 

@@ -63,7 +63,7 @@ public:
 	LVector3 operator-(const LVector3& vector3_B);
 	LVector3 operator /(float k);
 	LVector3 operator+(const LVector3& vector3_B);
-
+	LVector3 operator*(float k);
 };
 class LVector4{
 public:
@@ -86,8 +86,16 @@ public:
 	void setg(float v){ b = v; array[1] = v; }
 	void setb(float v){ c = v; array[2] = v; }
 	void setalpha(float v){ d = v; array[3] = v; }
-
+	void init(float ta, float tb, float tc, float td){
+		a = ta; b = tb;
+		c = tc; d = td;
+		array[0] = a;
+		array[1] = b;
+		array[2] = c;
+		array[3] = d;
+	}
 	LVector4 operator+(LVector4 lv);
+	LVector4 operator-(LVector4 lv);
 	float operator*(const LVector4& a);
 
 	LVector4 operator*( float  k);

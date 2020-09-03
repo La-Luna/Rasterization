@@ -104,6 +104,25 @@ LVector3 normalizeVector3(LVector3 temp){
 	return temp;
 
 }
+
+LVector4 normalizeVector4(LVector4 temp){
+	//1
+	float module = sqrt(temp.array[0] * temp.array[0] + temp.array[1] * temp.array[1] + temp.array[2] * temp.array[2]);
+
+	float  tempx = temp.a / module;
+	float tempy = temp.b / module;
+	float tempz = temp.c / module;
+	LVector4 ans(tempx, tempy, tempz, temp.d);
+	return ans;
+}
+
+float dot2vector4(const LVector4& temp1, const LVector4& temp2){
+	float temp_ans=0;
+	for (int i = 0; i < 3; i++){
+		temp_ans =temp_ans+ temp1.array[i] * temp2.array[i];
+	}
+	return temp_ans;
+}
 LVector3 crossVector3(LVector3 temp1, LVector3 temp2){
 	float t1=temp1.array[1]*temp2.array[2]-temp1.array[2]*temp2.array[1];
 	float t2 = -(temp1.array[0] * temp2.array[2] - temp1.array[2] * temp2.array[0]);
