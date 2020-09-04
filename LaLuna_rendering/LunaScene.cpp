@@ -3,36 +3,54 @@
 #include "LunaGLMath.h"
 #include "funcs.h"
 #include <time.h>
+#include<cmath>
+#include"LVector.h"
+#include "LVert.h"
 #define PI 3.1415926
 //LunaScene* scene = NULL;
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
 
-LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat,const LVert& v){
+//const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v, LunaLight* light,const LVector3& eyepos
+LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat,const LVert& v,LunaLight* light,const LVector3& eyepos3){
 	LVert temp_v=v;
 	//temp_v.position=
 	//float z = temp_v.position.c;
 	temp_v.position = modelMat*temp_v.position;
+
+	//calculate light effect
+	float ambientStrength = 0.1;
+	LVector4 lightColor = LVector4(1, 1, 1, 0);
+	LVector4 ambient = lightColor*ambientStrength;
+	//LVector4 temp_vert = normalizeVector4(temp_v.position);//????
+	LVector4 temp_vert = temp_v.position;
+	LVector4 lightdirection = light->light_pos - temp_vert;
+	lightdirection = normalizeVector4(lightdirection);
+
+	float diffusecoso = 0.3*max(dot2vector4(lightdirection, temp_v.vertnomal), 0.0);
+	LVector4 diffuse = lightColor*diffusecoso;
+
+	float specularstrength = 0.5;
+	LVector4 _lightdirection = lightdirection*(-1);
+	LVector4 ref_lightdirection = reflectVector4(_lightdirection,temp_v.vertnomal);//after normalize
+	LVector4 eyepos4 = LVector4(eyepos3.array[0], eyepos3.array[1], eyepos3.array[2], 0);
+	LVector4 eyedirection = eyepos4 - temp_v.position;
+	eyedirection = normalizeVector4(eyedirection);
+	float spec_temp = max(dot2vector4(ref_lightdirection, eyedirection), 0.0);
+	spec_temp = pow(spec_temp, 32.0);
+	LVector4 specular = lightColor*spec_temp*specularstrength;
+
+//
+	temp_v.coloradd = specular+diffuse + ambient;
 	temp_v.position = viewMat*temp_v.position;
 	temp_v.position = projectionMat*temp_v.position;
 	//temp_v.position = temp_v.position / z;
 	return temp_v;
 
 }
-LFrag fragmentShaderProgram( LVert& interpolateV, LTexture* texture,LunaLight* light){
-	float ambientStrength = 0.1;
-	LVector4 lightColor = LVector4(1, 1, 1,0);
-	LVector4 ambient =lightColor*ambientStrength;
-	LVector4 temp_vert = normalizeVector4(interpolateV.position);
-	LVector4 lightdirection = light->light_pos - temp_vert;
-	lightdirection = normalizeVector4(lightdirection);
-	 
-	float diffusecoso = 0.3*max(dot2vector4(lightdirection, interpolateV.vertnomal),0.0);
- 	LVector4 diffuse = lightColor*diffusecoso;
-
-
+LFrag fragmentShaderProgram( LVert& interpolateV, LTexture* texture){
 	LFrag tempfrag;
 	tempfrag.m_position = interpolateV.position;
-	tempfrag.m_color = interpolateV.color + ambient+diffuse;
+	tempfrag.m_color = interpolateV.color.colordot(interpolateV.coloradd);
 	//tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
 	return tempfrag;
 }
@@ -55,7 +73,8 @@ void LunaScene::init(LVector4 viewport){
 
 	//create a light
 	m_light = new LunaLight;
-	m_light->setLightPos(10, 10, 0, 0);
+	setLightPoswitheyepos();
+
 
 	//create mesh
 	m_mesh = new LMesh();
@@ -63,6 +82,11 @@ void LunaScene::init(LVector4 viewport){
 	//makeSimpleTriangle();
 	makeSimpleCube();
 
+}
+void LunaScene::setLightPoswitheyepos(){
+	LVector3 curcameraeyepos3 = m_camera->getEyePos();
+	LVector4 caurcameraeyepos4 = LVector4(curcameraeyepos3.array[0], curcameraeyepos3.array[1], curcameraeyepos3.array[2], 0);
+	m_light->setLightPos(caurcameraeyepos4);
 }
 void LunaScene::initZBuffer(){
 	int z_buffer_size = (int)m_viewport.c*(int)m_viewport.d;
@@ -169,7 +193,7 @@ void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, con
 
 }
 void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bottom_left, const LVert& bottom_right, LunaProjectionMode mode){
-	clock_t lasttime = clock();
+
 	float yTop = top.position.b;
 	float yBottom = bottom_left.position.b;
 
@@ -181,9 +205,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 	const double right_dx = ((double)bottom_right.position.a - (double)top.position.a) / ((double)top.position.b  - (double)bottom_right.position.b);//+?+?-
 	double left_x = lineInsertWithHorizontalLine(top.position, bottom_left.position, (double)(yBottom + 0.5));
 	double right_x = lineInsertWithHorizontalLine(top.position, bottom_right.position, (double)(yBottom + 0.5));
-	clock_t curtime = clock();
-	double runtime = (curtime - lasttime) / (double)CLOCKS_PER_SEC;
-	cout << "runtime is " << runtime << endl;
+
 
 	for (int i = yBottomInt; i <= yTopInt; i++){
 
@@ -204,7 +226,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 				//cout << "Width of the texture=" << temp_textureWidth << endl;
 			LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(top, bottom_left, bottom_right, earlyZoutput, temp_textureWidth,temp_textureHeight,mode);
 			//fragment process
-			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID],m_light);
+			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
 				
 			LVector4 cur_color = fragment.m_color;
 			drawPixel(hdc, j, i, cur_color);
@@ -248,7 +270,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight,mode);
 
 				//fragment shader
-				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID],m_light);
+				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID]);
 
 				LVector4 cur_color = fragment.m_color;
 				drawPixel(hdc, xInt, yInt, cur_color);
@@ -311,6 +333,7 @@ void LunaScene::makecubemesh(){
 	//cube mesh;
 	vector<LVector4> temp_position_list;
 	vector<LVector4> temp_pos_color_list;
+	vector<LVector4> temp_pos_color_add_list;
 	vector<LTriangle> temp_tri_ID_list;
 	vector<LVector4> temp_normal_list;
 	//front face
@@ -335,6 +358,7 @@ void LunaScene::makecubemesh(){
 		temp_pos_color_list.push_back(LVector4(1.0, 0.5, 0.31, 0));
 		temp_pos_color_list.push_back(LVector4(1.0, 0.5, 0.31, 0));
 		temp_pos_color_list.push_back(LVector4(1.0, 0.5, 0.31, 0));
+
 
 		temp_tri_ID_list.push_back(LTriangle(0, 1, 3));
 		temp_tri_ID_list.push_back(LTriangle(1, 2, 3));
@@ -532,14 +556,19 @@ void LunaScene::makecubemesh(){
 		temp_normal_list.push_back(LVector4(0, -1, 0, 0));
 
 	}
+	temp_pos_color_add_list.clear();
 	for (int i = 0; i < temp_position_list.size(); i++){
 		temp_position_list[i].a /= 5; temp_position_list[i].array[0] /= 5;
 		temp_position_list[i].b /= 5; temp_position_list[i].array[1] /= 5;
 		temp_position_list[i].c /= 5; temp_position_list[i].array[2] /= 5;
+		temp_pos_color_add_list.push_back(LVector4(0, 0, 0, 0));
 	}
+
+
 	m_mesh->mesh_positionlist = temp_position_list;
 	m_mesh->mesh_orth_z.resize(temp_position_list.size());
 	m_mesh->mesh_pointscolorlist = temp_pos_color_list;
+	m_mesh->mesh_pointscoloraddlist = temp_pos_color_add_list;
 	m_mesh->mesh_triangleslist = temp_tri_ID_list;
 	m_mesh->mesh_texcoordlist = textureCoordlist;
 	m_mesh->mesh_normalist = temp_normal_list;
@@ -661,7 +690,7 @@ void LunaScene::transformVertixes(){
 	for (int i = 0; i < vertexNum; i++){
 		LVert v = transformed_mesh->getVert(i);
 
-		LVert transformed_v = vertexShaderProgram(m_modelMat, m_camera->getViewMat(),m_camera->getProjectionMat(),v);
+		LVert transformed_v = vertexShaderProgram(m_modelMat, m_camera->getViewMat(),m_camera->getProjectionMat(),v,m_light,m_camera->getEyePos());
 
 
 		//transformed_mesh->mesh_positionlist[i] = transformed_v;

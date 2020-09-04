@@ -303,6 +303,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			//cout << "new eye pos:" << delta.array[0] << "," << delta.array[1] << "," << delta.array[2] << endl;
 			scene->m_camera->setEyePos(delta);
+			scene->setLightPoswitheyepos();
 			InvalidateRect(hWnd, NULL, false);
 		}
 		break;
@@ -311,6 +312,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			LVector3 delta = scene->m_camera->getVvector()*(0.1);
 			delta = delta + scene->m_camera->getEyePos();
 			scene->m_camera->setEyePos(delta);
+			scene->setLightPoswitheyepos();
 			InvalidateRect(hWnd, NULL, false);
 		}
 		break;
@@ -319,6 +321,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			LVector3 delta = scene->m_camera->getUvector()*(0.1);
 			delta = delta + scene->m_camera->getEyePos();
 			scene->m_camera->setEyePos(delta);
+			scene->setLightPoswitheyepos();
 			InvalidateRect(hWnd, NULL, false);
 		}
 		break;
@@ -327,6 +330,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			LVector3 delta = scene->m_camera->getUvector()*(-0.1);
 			delta = delta + scene->m_camera->getEyePos();
 			scene->m_camera->setEyePos(delta);
+			scene->setLightPoswitheyepos();
 			InvalidateRect(hWnd, NULL, false);
 		}
 		break;

@@ -40,20 +40,20 @@ vector<int> sortfromHigh2Low(float a, float b, float c){
 }
 
 LVert calculateMiddle2inTri(LVert high_v, LVert low_v, float y0){
-	LVert ans;
+	LVert ans=high_v;
 	float x1 = high_v.position.a;
 	float y1 = high_v.position.b;
 	float x2 = low_v.position.a;
 	float y2 = low_v.position.b;
 
 	if (x1 == x2){
-		ans = low_v;
+		
 		ans.position.a = x1;
 		ans.position.b = y0;
 	}
 	else{
 		float x0 = x2 - ((y2 - y0) / (y2 - y1))*(x2 - x1);
-		ans = low_v;
+		
 		ans.position.a = x0;
 		ans.position.b = y0;
 	}
@@ -129,6 +129,16 @@ LVector3 crossVector3(LVector3 temp1, LVector3 temp2){
 	float t3 = temp1.array[0] * temp2.array[1] - temp1.array[1] * temp2.array[0];
 	LVector3 ans(t1, t2, t3);
 	return ans;
+}
+LVector4 reflectVector4(LVector4 direc, LVector4 normal){
+	LVector4 _direc = direc*(-1);
+
+	float module_direc = _direc*normal;
+	LVector4 S2 = normal * 2 * module_direc;
+	LVector4 ans = direc + S2;
+	ans = normalizeVector4(ans);
+	return ans;
+
 }
 
 #endif

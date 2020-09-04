@@ -10,8 +10,8 @@
 #include "LunaCamera.h"
 #include "LunaLight.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
-LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
-LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture, LunaLight* light);
+LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v, LunaLight* light,const LVector3& eyepos);
+LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture);
 
 class LunaScene;
 extern LunaScene* scene;
@@ -35,6 +35,7 @@ public:
 
 	//light
 	LunaLight* m_light;
+	void setLightPoswitheyepos();
 
 	//init
 	void init(LVector4 viewport);

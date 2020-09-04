@@ -117,7 +117,14 @@ LVector4 LVector4::operator*(float k){
 	return temp;
 
 }
-
+LVector4 LVector4::colordot(const LVector4& Lv){
+	float temp_arr[4];
+	for (int i = 0; i < 4; i++){
+		temp_arr[i] = array[i] * Lv.array[i];
+	}
+	LVector4 ans(temp_arr[0], temp_arr[1], temp_arr[2], temp_arr[3]);
+	return ans;
+}
 LVector4 LVector4::operator/(const float div){
 	LVector4 ans = *this;
 	float temp[4];

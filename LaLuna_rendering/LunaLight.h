@@ -17,6 +17,9 @@ public:
 	void setLightPos(float x, float y, float z, float w){
 		light_pos.init(x, y, z, w);
 	}
+	void setLightPos(const LVector4& temp){
+		light_pos.init(temp.a, temp.b, temp.c, temp.d);
+	}
 
 public:
 	LVector4 light_pos;

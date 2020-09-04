@@ -14,6 +14,7 @@ public:
 	LVector4 position;
 	float origin_orth_z;
 	LVector4 color;
+	LVector4 coloradd;
 	LVector2 texcoord;
 	int texture_ID;
 	LVector4 vertnomal;

@@ -99,6 +99,7 @@ public:
 	float operator*(const LVector4& a);
 
 	LVector4 operator*( float  k);
+	LVector4 colordot(const LVector4& Lv);
 	LVector4 operator/(const float div);
 
 };

@@ -19,6 +19,7 @@ public:
 
 	vector<LVector4>mesh_positionlist;
 	vector<LVector4>mesh_pointscolorlist;
+	vector<LVector4>mesh_pointscoloraddlist;
 	vector<LTriangle>mesh_triangleslist;
 	vector<LVector2>mesh_texcoordlist;
 	vector<LVector4> mesh_normalist;
