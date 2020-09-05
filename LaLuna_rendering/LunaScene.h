@@ -10,8 +10,8 @@
 #include "LunaCamera.h"
 #include "LunaLight.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
-LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v, LunaLight* light,const LVector3& eyepos);
-LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture);
+LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
+LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture, LunaLight* light,const LVector3& eyepos);
 
 class LunaScene;
 extern LunaScene* scene;
@@ -70,6 +70,11 @@ public:
 	void makecubemesh();
 	void makeSimpleTriangle();
 	void makeSimpleCube();
+	void makeSimpleEarth();
+	void makeearthmesh(float r, int n_A, int n_B);
+
+
+
 	void softRasterization(HDC hdc);
 	void fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2, LunaProjectionMode mode);
 	void fillPanBottomTri_solid(HDC hdc, const LVert&v0, const LVert& v1, const LVert& v2, LunaProjectionMode mode);

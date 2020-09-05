@@ -12,9 +12,11 @@ public:
 		texture_ID = 0;
 	}
 	LVector4 position;
-	float origin_orth_z;
 	LVector4 color;
-	LVector4 coloradd;
+	LVector4 model_position;
+	LVector4 model_normal;
+	float origin_orth_z;
+
 	LVector2 texcoord;
 	int texture_ID;
 	LVector4 vertnomal;
@@ -33,6 +35,8 @@ class LFrag{
 	friend LFrag;
 public:
 	LVector4 m_color;
+	LVector4 coloradd;
+
 	LVector4 m_position;
 };
 

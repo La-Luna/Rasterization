@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 #define PI 3.1415926
-LunaCamera::LunaCamera(){
+LunaCamera::LunaCamera(LunaProjectionMode mode){
 	m_fov = 45.0;
 	m_aspect = 1.0;
 	m_near = 0.1;
@@ -16,13 +16,18 @@ LunaCamera::LunaCamera(){
 
 	
 	//LVector3 tempEyepos( 0, 0,10);
-	LVector3 tempEyepos(10, 0, 0);
+	LVector3 tempEyepos( 10,0, 0);
 	
 
-	LVector3 tempU(0,0,-1);
+	//LVector3 tempU(1, 0, 0);
+	//LVector3 tempCentor(0, 0, 0);
+	//LVector3 tempV(0, 1, 0);
+	//LVector3 tempN(0, 0, 1);
+
+	LVector3 tempU(0, 0, -1);
 	LVector3 tempCentor(0, 0, 0);
-	LVector3 tempV(0,1,0);
-	LVector3 tempN(1,0,0);
+	LVector3 tempV(0, 1, 0);
+	LVector3 tempN(1, 0, 0);
 
 
 		m_eyePos = tempEyepos;
@@ -30,6 +35,9 @@ LunaCamera::LunaCamera(){
 		m_N = tempN;
 		m_U = tempU;
 		m_objectCenter = tempCentor;
+
+	initProjectionMatrix(mode);
+
 }
 void LunaCamera::initViewMatrix(){
 
@@ -92,13 +100,6 @@ void LunaCamera::initProjectionMatrix(LunaProjectionMode mode){
 			0, 0, t33, 0,
 			0, 0, t34, 1
 			);
-		//LMatrix4 temp_per2or(
-		//	n, 0, 0, 0,
-		//	0, n, 0, 0,
-		//	0, 0, n + f, 1,
-		//	0, 0, -n*f, 0
-		//	);
-		//temp_proj = temp_proj*temp_per2or;
 		m_ProjectionMat=temp_proj;
 
 	}
@@ -127,9 +128,8 @@ void LunaCamera::updateVector(){
 	m_U = crossVector3(m_V, m_N);
 
 }
-void LunaCamera::updateMatrix(LunaProjectionMode mode){
+void LunaCamera::updateMatrix(){
 	initViewMatrix();
-	initProjectionMatrix(mode);
 }
 void LunaCamera::setm_N(float myawn, float mpitch){
 	//if (myawn <= -180)myawn = -180.0;

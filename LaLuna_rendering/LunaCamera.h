@@ -9,7 +9,7 @@
 using namespace std;
 class LunaCamera{
 public:
-	LunaCamera();
+	LunaCamera(LunaProjectionMode mode);
 
 	LVector3 getEyePos()const { return m_eyePos; }
 	float getFov()const { return m_fov; }
@@ -24,7 +24,7 @@ public:
 	void setm_N(float myawn,float mpitch);
 	void setEyePos(const LVector3&neweyepos){ m_eyePos = neweyepos; }
 	void updateVector();
-	void updateMatrix(LunaProjectionMode mode);
+	void updateMatrix();
 	void initViewMatrix();
 	void initProjectionMatrix(LunaProjectionMode mode);
 

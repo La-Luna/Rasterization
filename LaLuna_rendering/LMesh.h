@@ -19,10 +19,11 @@ public:
 
 	vector<LVector4>mesh_positionlist;
 	vector<LVector4>mesh_pointscolorlist;
-	vector<LVector4>mesh_pointscoloraddlist;
 	vector<LTriangle>mesh_triangleslist;
 	vector<LVector2>mesh_texcoordlist;
 	vector<LVector4> mesh_normalist;
+	vector<LVector4>mesh_model_normallist;
+	vector<LVector4>mesh_model_positionlist;
 	vector<float>mesh_orth_z;
 	//get some values
 	LVert getVert(int ID);
