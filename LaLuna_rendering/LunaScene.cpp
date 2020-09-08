@@ -5,7 +5,10 @@
 #include <time.h>
 #include<cmath>
 #include"LVector.h"
+#include "LMaterial.h"
 #include "LVert.h"
+#include "readfilefuncs.h"
+#include<fstream>
 #define PI 3.1415926
 //LunaScene* scene = NULL;
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
@@ -25,21 +28,21 @@ LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, cons
 	return temp_v;
 
 }
-LFrag fragmentShaderProgram( LVert& interpolateV, LTexture* texture,LunaLight* light,const LVector3& eyepos3){
+LFrag fragmentShaderProgram(LVert& interpolateV, LTexture* texture, LunaLight* light, const LVector3& eyepos3,LMaterial* vmaterial){
 
 
 	//calculate light effect
-	float ambientStrength = 0.1;
+
 	LVector4 lightColor = LVector4(1, 1, 1, 0);
-	LVector4 ambient = lightColor*ambientStrength;
+	LVector4 ambient =  lightColor.colordot(vmaterial->ambient);
 	//LVector4 temp_vert = normalizeVector4(temp_v.position);//????
 	LVector4 temp_vert = interpolateV.model_position;
 	LVector4 lightdirection = light->light_pos - temp_vert;
 	lightdirection = normalizeVector4(lightdirection);
 	float diffusecoso = 0.8*max(dot2vector4(lightdirection, interpolateV.model_normal), 0.0);
-	LVector4 diffuse = lightColor*diffusecoso;
+	LVector4 diffuse = lightColor.colordot(vmaterial->diffuse)*diffusecoso;
 
-	float specularstrength = 0.5;
+
 	LVector4 _lightdirection = lightdirection*(-1);
 	LVector4 ref_lightdirection = reflectVector4(_lightdirection, interpolateV.model_normal);//after normalize
 	LVector4 eyepos4 = LVector4(eyepos3.array[0], eyepos3.array[1], eyepos3.array[2], 0);
@@ -47,7 +50,7 @@ LFrag fragmentShaderProgram( LVert& interpolateV, LTexture* texture,LunaLight* l
 	eyedirection = normalizeVector4(eyedirection);
 	float spec_temp = max(dot2vector4(ref_lightdirection, eyedirection), 0.0);
 	spec_temp = pow(spec_temp, 32.0);
-	LVector4 specular = lightColor*spec_temp*specularstrength;
+	LVector4 specular = lightColor.colordot(vmaterial->specular)*spec_temp;
 
 	//
 
@@ -87,7 +90,8 @@ void LunaScene::init(LVector4 viewport){
 	transformed_mesh = new LMesh();
 	//makeSimpleTriangle();
 	//makeSimpleCube();
-	makeSimpleEarth();
+	//makeSimpleEarth();
+                                                                                   	makesimpleSceneTeapot();
 
 }
 void LunaScene::setLightPoswitheyepos(){
@@ -233,7 +237,7 @@ void LunaScene::fillPanBottomTri_solid(HDC hdc, const LVert&top, const LVert& bo
 				//cout << "Width of the texture=" << temp_textureWidth << endl;
 			LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(top, bottom_left, bottom_right, earlyZoutput, temp_textureWidth,temp_textureHeight,mode);
 			//fragment process
-			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID], m_light, m_camera->getEyePos());
+			LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID], m_light, m_camera->getEyePos(),m_materiallist[interpolatedV.material_ID]);
 				
 			LVector4 cur_color = fragment.m_color;
 			drawPixel(hdc, j, i, cur_color);
@@ -277,7 +281,7 @@ void LunaScene::fillPanTopTri_solid(HDC hdc, const LVert&top_left, const LVert& 
 				LVert interpolatedV = interpolate_inViewportSpace_otherAttrib(low, top_left, top_right, earlyZoutput, temp_textureWidth, temp_textureHeight,mode);
 
 				//fragment shader
-				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID], m_light, m_camera->getEyePos());
+				LFrag fragment = fragmentShaderProgram(interpolatedV, this->m_texturelist[interpolatedV.texture_ID], m_light, m_camera->getEyePos(),m_materiallist[interpolatedV.material_ID]);
 
 				LVector4 cur_color = fragment.m_color;
 				drawPixel(hdc, xInt, yInt, cur_color);
@@ -338,6 +342,11 @@ void LunaScene::makeSimpleTriangle(){
 }
 void LunaScene::makeSimpleEarth(){
 	makeearthmesh(1.0,30,30);
+
+	LMaterial*mat = new LMaterial();
+	m_materiallist.push_back(mat);
+
+
 	LTexture* earthtexture = new LTexture();
 	string texFileName = "earth3.bmp";
 	bool success = earthtexture->initwithFile(texFileName.c_str());
@@ -354,7 +363,7 @@ void LunaScene::makeearthmesh(float r,int n_A,int n_B){
 	vector<LVector4> temp_normal_list;
 	vector<LTriangle> temp_triangle_list;
 	vector<LVector2> temp_texcoord_list;
-
+	vector<int> temp_materialID_list;
 
 	float ty, tx, tz;
 	float curA, curB;
@@ -380,6 +389,7 @@ void LunaScene::makeearthmesh(float r,int n_A,int n_B){
 			temp_normal_list.push_back(curpos);
 			temp_corlor_list.push_back(LVector4(1, 1, 1, 1));
 			temp_texcoord_list.push_back(LVector2(curs, curt));
+			temp_materialID_list.push_back(0);
 			
 		}
 	}
@@ -406,7 +416,7 @@ void LunaScene::makeearthmesh(float r,int n_A,int n_B){
 	m_mesh->mesh_triangleslist = temp_triangle_list;
 	m_mesh->mesh_texcoordlist = temp_texcoord_list;
 	m_mesh->mesh_normalist = temp_normal_list;
-
+	m_mesh->mesh_matirialIDlist = temp_materialID_list;
 
 }
 void LunaScene::makecubemesh(){
@@ -1111,5 +1121,73 @@ LVert LunaScene::interpolate_inViewportSpace(const LVert& v1, const LVert&v2, fl
 		return v;
 	}
 
+
+}
+void LunaScene::makesimpleSceneTeapot(){
+	loadASEmodels("resource/teaport.ASE");
+}
+void LunaScene::loadASEmodels(string filename){
+	FILE* fp=NULL;
+	fp = fopen(filename.c_str(), "r");
+	if (fp == NULL){
+		cout << "read file " << filename << " failed!" << endl;
+	}
+	vector<LVector4> modelpositionlist;
+	vector<LVector4> modelfacelist;
+	vector<LVector4> normallist;
+
+	{
+		fscanStr(fp, "*3DSMAX_ASCIIEXPORT");
+		fscanInt(fp);
+		fscanStr(fp, "*COMMENT");
+		fscanOneQuatation(fp);
+		fscanStr(fp,"*SCENE");
+		fscanStr(fp, "{");
+		fscanStr(fp, "*SCENE_FILENAME");
+		fscanOneQuatation(fp);
+		fscanStr(fp, "*SCENE_FIRSTFRAME");
+		fscanInt(fp);
+		fscanStr(fp, "*SCENE_LASTFRAME");
+		fscanInt(fp);
+		fscanStr(fp, "*SCENE_FRAMESPEED");
+		fscanInt(fp);
+		fscanStr(fp, "*SCENE_TICKSPERFRAME");
+		fscanInt(fp);
+		fscanStr(fp, "*SCENE_BACKGROUND_STATIC");
+		fscanVector3(fp);
+		fscanStr(fp, "*SCENE_AMBIENT_STATIC");
+		fscanVector3(fp);
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MATERIAL_LIST");
+		fscanStr(fp, "{");
+		fscanStr(fp, "*MATERIAL_COUNT");
+		int materialnums=fscanInt(fp);
+		for (int i = 0; i < materialnums; i++){
+			fscanStr(fp, "*MATERIAL");
+			int materialID = fscanInt(fp);
+			assert(materialID == i);
+			fscanStr(fp, "*MATERIAL_NAME"); fscanOneQuatation(fp);
+			fscanStr(fp, "*MATERIAL_CLASS"); fscanOneQuatation(fp);
+			fscanStr(fp, "*MATERIAL_AMBIENT");
+			LVector3 ambient = fscanVector3(fp);
+			fscanStr(fp, "*MATERIAL_DIFFUSE");
+			LVector3 diffuse = fscanVector3(fp);
+			fscanStr(fp, "*MATERIAL_SPECULAR");
+			LVector3 specular= fscanVector3(fp);
+			float shininess
+
+
+
+		}
+
+
+
+
+
+		//cout << test << endl;
+	
+	}
+
+	fclose(fp);
 
 }

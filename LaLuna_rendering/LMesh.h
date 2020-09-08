@@ -25,6 +25,7 @@ public:
 	vector<LVector4>mesh_model_normallist;
 	vector<LVector4>mesh_model_positionlist;
 	vector<float>mesh_orth_z;
+	vector<int> mesh_matirialIDlist;
 	//get some values
 	LVert getVert(int ID);
 	void setVert(int i,LVert v);

@@ -9,9 +9,10 @@
 #include"LVector.h"
 #include "LunaCamera.h"
 #include "LunaLight.h"
+#include "LMaterial.h"
 //, const LMatrix4&viewMat, const LMatrix4& projectionMat
 LVert vertexShaderProgram(const LMatrix4& modelMat, const LMatrix4&viewMat, const LMatrix4& projectionMat, const LVert& v);
-LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture, LunaLight* light,const LVector3& eyepos);
+LFrag fragmentShaderProgram(LVert& interpolateV,LTexture* texture, LunaLight* light,const LVector3& eyepos,LMaterial* vmatiral);
 
 class LunaScene;
 extern LunaScene* scene;
@@ -36,6 +37,9 @@ public:
 	//light
 	LunaLight* m_light;
 	void setLightPoswitheyepos();
+
+	//material
+	vector<LMaterial*> m_materiallist;
 
 	//init
 	void init(LVector4 viewport);
@@ -72,6 +76,8 @@ public:
 	void makeSimpleCube();
 	void makeSimpleEarth();
 	void makeearthmesh(float r, int n_A, int n_B);
+	void makesimpleSceneTeapot();
+	void loadASEmodels(string filename);
 
 
 

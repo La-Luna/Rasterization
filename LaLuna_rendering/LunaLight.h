@@ -9,8 +9,13 @@ class LunaLight{
 public:
 	LunaLight(){
 		light_ambient.init(0,0,0,1);
-	}
 
+		light_diffuse.init(1, 1, 1, 1);
+
+		light_specular.init(1, 1, 1, 1);
+
+	}
+	~LunaLight(){};
 
 
 public:
