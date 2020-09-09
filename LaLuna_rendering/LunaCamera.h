@@ -11,7 +11,7 @@ class LunaCamera{
 public:
 	LunaCamera(LunaProjectionMode mode);
 
-	LVector3 getEyePos()const { return m_eyePos; }
+ 	LVector3 getEyePos()const { return m_eyePos; }
 	float getFov()const { return m_fov; }
 	float getNear()const { return m_near; }
 	float getFar()const { return m_far; }
@@ -23,6 +23,9 @@ public:
 	LMatrix4 getProjectionMat()const { return m_ProjectionMat; }
 	void setm_N(float myawn,float mpitch);
 	void setEyePos(const LVector3&neweyepos){ m_eyePos = neweyepos; }
+	void setFar(float f){ m_far = f; };
+	void serNear(float n){ m_near = n; };
+
 	void updateVector();
 	void updateMatrix();
 	void initViewMatrix();

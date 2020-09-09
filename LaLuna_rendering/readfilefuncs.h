@@ -49,3 +49,49 @@ LVector3 fscanVector3(FILE* fp){
 	LVector3 ans = LVector3(x, y, z);
 	return ans;
 }
+float fscanFloat(FILE* fp){
+	float ans;
+	fscanf(fp, "%f", &ans);
+	return ans;
+
+}
+vector<string> divideStr(const string&str, const string&dividerChars){
+	const int dividerCharCount = (int)dividerChars.size();
+	vector<string> strList;
+	string t_str;
+	int len = (int)str.size();
+	for (int i = 0; i < len; i++){
+		char c = str[i];
+		bool cIsDividerCh = false;
+		for (int j = 0; j < dividerCharCount; j++){
+			char divierCh = dividerChars[j];
+			if (c == divierCh){
+				cIsDividerCh = true;
+				break;
+			}
+		}//got cIsDividerCh
+		if (cIsDividerCh == false){
+			t_str += c;
+		}
+		else{
+			strList.push_back(t_str);
+			t_str.clear();
+		}
+	}
+	if (t_str.empty() == false){
+		strList.push_back(t_str);
+	}//got strList;
+	return strList;
+
+}
+int string2int(string strnum){
+	//string to nums
+	int ans = 0;
+	int mult = 1;
+	for (int i = strnum.size() - 1; i >= 0; i--){
+		int temp = strnum[i] - '0';
+		ans = mult*temp + ans;
+		mult *= 10;
+	}
+	return ans;
+}

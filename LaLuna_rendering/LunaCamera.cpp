@@ -9,14 +9,14 @@ LunaCamera::LunaCamera(LunaProjectionMode mode){
 	m_fov = 45.0;
 	m_aspect = 1.0;
 	m_near = 0.1;
-	m_far = 100;
+	m_far = 250;
 
 
 	//keep rotate
 
 	
 	//LVector3 tempEyepos( 0, 0,10);
-	LVector3 tempEyepos( 10,0, 0);
+	LVector3 tempEyepos( 100,0, 0);
 	
 
 	//LVector3 tempU(1, 0, 0);

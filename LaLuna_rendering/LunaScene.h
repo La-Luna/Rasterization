@@ -77,7 +77,7 @@ public:
 	void makeSimpleEarth();
 	void makeearthmesh(float r, int n_A, int n_B);
 	void makesimpleSceneTeapot();
-	void loadASEmodels(string filename);
+	void loadASEmodels(const string& filepath,const string& filename);
 
 
 

@@ -59,7 +59,7 @@ LFrag fragmentShaderProgram(LVert& interpolateV, LTexture* texture, LunaLight* l
 	tempfrag.m_position = interpolateV.position;
 	//if (interpolateV.coloradd.a <= 0 && interpolateV.coloradd.b <= 0 && interpolateV.coloradd.c <= 0 && interpolateV.coloradd.d <= 0)cout << "no light effect"; 
 	tempfrag.m_color = interpolateV.color.colordot(tempfrag.coloradd);
-	//tempfrag.m_color = interpolateV.color;
+	tempfrag.m_color = interpolateV.color;
 	tempfrag.m_color = perComponentProduct(interpolateV.color, texture->getColor(interpolateV.texcoord));
 	return tempfrag;
 }
@@ -74,6 +74,8 @@ LunaScene::~LunaScene(){
 void LunaScene::init(LVector4 viewport){
 	//set camera
 	m_camera = new LunaCamera(lunaOrthogonalpromode);
+	//m_camera->setEyePos(LVector3(60.0, 0.0, 0.0));
+	//m_camera->setFar(150.0);
 
 	//calculate the viewport matrix according to the viewport size
 	calculateViewportMatrix(viewport);
@@ -91,7 +93,7 @@ void LunaScene::init(LVector4 viewport){
 	//makeSimpleTriangle();
 	//makeSimpleCube();
 	//makeSimpleEarth();
-                                                                                   	makesimpleSceneTeapot();
+    makesimpleSceneTeapot();
 
 }
 void LunaScene::setLightPoswitheyepos(){
@@ -103,10 +105,10 @@ void LunaScene::initZBuffer(){
 	int z_buffer_size = (int)m_viewport.c*(int)m_viewport.d;
 	z_test_buffer = new double[z_buffer_size];
 	for (int i = 0; i < z_buffer_size; i++){
-		z_test_buffer[i] = 10;
+		z_test_buffer[i] = INT_MAX;
 	}
 }
-void LunaScene::softRasterization(HDC hdc){
+ void LunaScene::softRasterization(HDC hdc){
 
 	cout << "run into LunaScene::softRasterization(HDC hdc)" << endl;
 	//clear zBuffer
@@ -146,7 +148,7 @@ void LunaScene::softRasterization(HDC hdc){
 void LunaScene::clearZBuffer(){
 	int buffersize = (int)m_viewport.c*(int)m_viewport.d;
 	for (int i = 0; i < buffersize; i++){
-		z_test_buffer[i] =10;
+		z_test_buffer[i] = INT_MAX;
 	}
 }
 void LunaScene::fillTriangleSolid(HDC hdc, const LVert& v0, const LVert& v1, const LVert& v2,LunaProjectionMode mode){
@@ -1124,19 +1126,39 @@ LVert LunaScene::interpolate_inViewportSpace(const LVert& v1, const LVert&v2, fl
 
 }
 void LunaScene::makesimpleSceneTeapot(){
-	loadASEmodels("resource/teaport.ASE");
+	loadASEmodels("resource/teaport/","teaport.ASE");
 }
-void LunaScene::loadASEmodels(string filename){
+void LunaScene::loadASEmodels(const string& folderpath,const string& filename){
 	FILE* fp=NULL;
-	fp = fopen(filename.c_str(), "r");
+	string fullfilename = folderpath + filename;
+	fp = fopen(fullfilename.c_str(), "r");
 	if (fp == NULL){
 		cout << "read file " << filename << " failed!" << endl;
 	}
-	vector<LVector4> modelpositionlist;
-	vector<LVector4> modelfacelist;
-	vector<LVector4> normallist;
+	vector<LVector4> modelpositionlist;//2082
+	vector<LTriangle> modelfacelist;//4096
+	vector<int> vectexmaterialID;
+	vector<LVector4> normallist; //
+	vector<LVector2> texcoordlist;
+	vector<LTriangle> tfacelist;
+
+	vector<LVector4> facenormallist;//4096
+	vector<LVector4> normalv0;//2082
+	vector<LVector4> normalv1;//2082
+	vector<LVector4> normalv2;//2082
+
+	vector<string> texturenamelist;//1
+	vector<LVector4> ambientlist;//1
+	vector<LVector4>diffuselist;//1
+	vector<LVector4>specularlist;//1
+	vector<float> shinninesslist;//1
+	vector<float> shinistrengthlist;//1
+
 
 	{
+
+
+
 		fscanStr(fp, "*3DSMAX_ASCIIEXPORT");
 		fscanInt(fp);
 		fscanStr(fp, "*COMMENT");
@@ -1166,20 +1188,247 @@ void LunaScene::loadASEmodels(string filename){
 			fscanStr(fp, "*MATERIAL");
 			int materialID = fscanInt(fp);
 			assert(materialID == i);
+			fscanStr(fp, "{");
 			fscanStr(fp, "*MATERIAL_NAME"); fscanOneQuatation(fp);
 			fscanStr(fp, "*MATERIAL_CLASS"); fscanOneQuatation(fp);
-			fscanStr(fp, "*MATERIAL_AMBIENT");
-			LVector3 ambient = fscanVector3(fp);
-			fscanStr(fp, "*MATERIAL_DIFFUSE");
-			LVector3 diffuse = fscanVector3(fp);
-			fscanStr(fp, "*MATERIAL_SPECULAR");
-			LVector3 specular= fscanVector3(fp);
-			float shininess
+			fscanStr(fp, "*MATERIAL_AMBIENT"); LVector3 ambient3 = fscanVector3(fp); LVector4 ambient = LVector4(ambient3.array[0], ambient3.array[1], ambient3.array[2], 1);
+				fscanStr(fp, "*MATERIAL_DIFFUSE"); LVector3 diffuse3 = fscanVector3(fp);	LVector4 diffuse = LVector4(diffuse3.array[0], diffuse3.array[1], diffuse3.array[2], 1);
+			fscanStr(fp, "*MATERIAL_SPECULAR"); LVector3 specular3 = fscanVector3(fp); LVector4 specular = LVector4(specular3.array[0], specular3.array[1], specular3.array[2], 1);
+			fscanStr(fp, "*MATERIAL_SHINE"); float shininess = fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_SHINESTRENGTH"); float shininessStrength = fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_TRANSPARENCY"); fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_WIRESIZE"); fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_SHADING");fscanStr(fp, "Blinn");
+			fscanStr(fp, "*MATERIAL_XP_FALLOFF"); fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_SELFILLUM"); fscanFloat(fp);
+			fscanStr(fp, "*MATERIAL_FALLOFF"); fscanStr(fp, "In");
+			fscanStr(fp, "*MATERIAL_XP_TYPE"); fscanStr(fp, "Filter");
+			fscanStr(fp, "*MAP_DIFFUSE");
+			fscanStr(fp, "{");
+			fscanStr(fp, "*MAP_NAME"); fscanOneQuatation(fp);
+			fscanStr(fp, "*MAP_CLASS"); fscanOneQuatation(fp);
+			fscanStr(fp, "*MAP_SUBNO"); fscanInt(fp);
+			fscanStr(fp, "*MAP_AMOUNT"); fscanFloat(fp);
+			fscanStr(fp, "*BITMAP"); string texQuatetion = fscanOneQuatation(fp);
+			string texFilePath = texQuatetion.substr(1, (int)texQuatetion.size() - 2);
+			string diveiderch;
+			diveiderch.push_back('/');
+			diveiderch.push_back('\\');
+			string texFilename = divideStr(texFilePath, diveiderch).back();
+			fscanStr(fp, "*MAP_TYPE"); fscanStr(fp, "Screen");
+			fscanStr(fp, "*UVW_U_OFFSET"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_V_OFFSET"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_U_TILING"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_V_TILING"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_ANGLE"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_BLUR"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_BLUR_OFFSET"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_NOUSE_AMT"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_NOISE_SIZE"); fscanFloat(fp);
+			fscanStr(fp, "*UVW_NOISE_LEVEL"); fscanInt(fp);
+			fscanStr(fp, "*UVW_NOISE_PHASE"); fscanFloat(fp);
+			fscanStr(fp, "*BITMAP_FILTER");fscanStr(fp, "Pyramidal");
+			fscanStr(fp, "}"); fscanStr(fp, "}");
+			
+			texturenamelist.push_back(texFilename);
+			ambientlist.push_back(ambient);
+			diffuselist.push_back(diffuse);
+			specularlist.push_back(specular);
+			shinninesslist.push_back(shininess);
+			shinistrengthlist.push_back(shininessStrength);
 
 
 
 		}
+		fscanStr(fp, "}");
+		fscanStr(fp, "*GEOMOBJECT"); fscanStr(fp, "{");
+		fscanStr(fp, "*NODE_NAME"); string nodename=fscanOneQuatation(fp);
+		fscanStr(fp, "*NODE_TM"); fscanStr(fp, "{");
+		fscanStr(fp, "*NODE_NAME"); fscanOneQuatation(fp);
+		fscanStr(fp, "*INHERIT_POS"); fscanInt(fp); fscanInt(fp);fscanInt(fp);
+		fscanStr(fp, "*INHERIT_ROT"); fscanInt(fp); fscanInt(fp); fscanInt(fp);
+		fscanStr(fp, "*INHERIT_SCL"); fscanInt(fp); fscanInt(fp); fscanInt(fp);
+		fscanStr(fp, "*TM_ROW0");fscanVector3(fp);
+		fscanStr(fp, "*TM_ROW1"); fscanVector3(fp);
+		fscanStr(fp, "*TM_ROW2"); fscanVector3(fp);
+		fscanStr(fp, "*TM_ROW3"); fscanVector3(fp);
+		fscanStr(fp, "*TM_POS"); fscanVector3(fp);
+		fscanStr(fp, "*TM_ROTAXIS"); fscanVector3(fp);
+		fscanStr(fp, "*TM_ROTANGLE"); fscanFloat(fp);
+		fscanStr(fp, "*TM_SCALE"); fscanVector3(fp);
+		fscanStr(fp, "*TM_SCALEAXIS"); fscanVector3(fp);
+		fscanStr(fp, "*TM_SCALEAXISANG"); fscanFloat(fp);
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MESH"); fscanStr(fp, "{");
+		fscanStr(fp, "*TIMEVALUE"); fscanInt(fp);
+		fscanStr(fp, "*MESH_NUMVERTEX"); int numvertex = fscanInt(fp);
+		fscanStr(fp, "*MESH_NUMFACES"); int numfaces = fscanInt(fp);
+		fscanStr(fp, "*MESH_VERTEX_LIST"); fscanStr(fp, "{");
+		float maxvertexpos = 0;
+		for (int vetexIndex = 0; vetexIndex < numvertex; vetexIndex++){
+			fscanStr(fp, "*MESH_VERTEX");
+			int vID = fscanInt(fp);
+			LVector3 vertexPos3 = fscanVector3(fp);
+			assert(vID == vetexIndex);
+			if (vertexPos3.array[0] > maxvertexpos)maxvertexpos =  vertexPos3.array[0];
+			if (vertexPos3.array[1] > maxvertexpos)maxvertexpos = vertexPos3.array[1];
+			if (vertexPos3.array[2] > maxvertexpos)maxvertexpos = vertexPos3.array[2];
+			LVector4 vertexPos = LVector4(vertexPos3.array[0], vertexPos3.array[1], vertexPos3.array[1], 1);
+			modelpositionlist.push_back(vertexPos);
 
+		}
+		cout << "maxvertexpos:" << maxvertexpos << endl;
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MESH_FACE_LIST"); fscanStr(fp, "{");
+		for (int faceIndex = 0; faceIndex < numfaces; faceIndex++){
+			fscanStr(fp, "*MESH_FACE");
+			string emp;
+			string trifaceIDstr = fscanStr(fp,emp);
+			string trifaceIDstr_tmp = trifaceIDstr.substr(0, (int)trifaceIDstr.size() - 1);
+			int trifaceIDint = string2int(trifaceIDstr_tmp);
+			assert(trifaceIDint == faceIndex);
+			fscanStr(fp, "A:"); int id1 = fscanInt(fp);
+			fscanStr(fp, "B:"); int id2 = fscanInt(fp);
+			fscanStr(fp, "C:"); int id3 = fscanInt(fp);
+			fscanStr(fp, "AB:"); fscanInt(fp);
+			fscanStr(fp, "BC:"); fscanInt(fp);
+			fscanStr(fp, "CA:"); fscanInt(fp);
+			fscanStr(fp, "*MESH_SMOOTHING"); fscanInt(fp);
+			fscanStr(fp, "*MESH_MTLID"); fscanInt(fp);
+
+			LTriangle face = LTriangle(id1, id2, id3);
+			modelfacelist.push_back(face);
+		}
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MESH_NUMTVERTEX"); int texcoornums = fscanInt(fp);
+		fscanStr(fp, "*MESH_TVERTLIST"); fscanStr(fp, "{");
+		for (int texvIndex = 0; texvIndex < texcoornums; texvIndex++){
+			fscanStr(fp, "");
+			int texcoorID = fscanInt(fp);
+			assert(texcoorID == texvIndex);
+			LVector3 temp = fscanVector3(fp);
+			LVector2 texcoordtemp = LVector2(temp.array[0], temp.array[1]);
+			texcoordlist.push_back(texcoordtemp);
+		}
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MESH_NUMTVFACES"); int numtvfaces = fscanInt(fp);
+		fscanStr(fp, "*MESH_TFACELIST"); fscanStr(fp, "{");
+		for (int tface = 0; tface < numtvfaces; tface++){
+			fscanStr(fp, "*MESH_TFACE");
+			int tfaceID = fscanInt(fp);
+			assert(tfaceID == tface);
+			int x, y, z;
+			x = fscanInt(fp);
+			y = fscanInt(fp);
+			z = fscanInt(fp);
+            LTriangle tv=LTriangle(x, y, z);
+			tfacelist.push_back(tv);
+		}
+		fscanStr(fp, "}");
+		fscanStr(fp, "*MESH_NUMCVERTEX"); int numcvetex = fscanInt(fp);
+		if (numcvetex != 0){
+			assert(false);
+		}
+		fscanStr(fp, "*MESH_NORMALS"); fscanStr(fp, "{");
+		for (int facenormalIndex = 0; facenormalIndex < numfaces; facenormalIndex++){
+			fscanStr(fp, "*MESH_FACENORMAL"); int faceID = fscanInt(fp); LVector3 facenormal3 = fscanVector3(fp); LVector4 facenormal = LVector4(facenormal3.array[0], facenormal3.array[1], facenormal3.array[2], 1);
+			fscanStr(fp, "*MESH_VERTEXNORMAL"); fscanInt(fp); LVector3 nv03 = fscanVector3(fp); LVector4 nv0 = LVector4(nv03.array[0], nv03.array[1], nv03.array[2], 1);
+			fscanStr(fp, "*MESH_VERTEXNORMAL"); fscanInt(fp); LVector3 nv13 = fscanVector3(fp); LVector4 nv1 = LVector4(nv13.array[0], nv13.array[1], nv13.array[2], 1);
+			fscanStr(fp, "*MESH_VERTEXNORMAL"); fscanInt(fp); LVector3 nv23 = fscanVector3(fp); LVector4 nv2 = LVector4(nv23.array[0], nv23.array[1], nv23.array[2], 1);
+			
+			facenormallist.push_back(facenormal);
+			normalv0.push_back(nv0);
+			normalv1.push_back(nv1);
+			normalv2.push_back(nv2);
+
+
+		}
+		fscanStr(fp, "}");		fscanStr(fp, "}");
+		fscanStr(fp, "*PROP_MOTIONBLUR"); fscanInt(fp);
+		fscanStr(fp, "*PROP_CASTSHADOW"); fscanInt(fp);
+		fscanStr(fp, "*PROP_RECVSHADOW"); fscanInt(fp);
+		fscanStr(fp, "*MATERIAL_REF"); fscanInt(fp);
+
+		//convert!!
+		cout << "modelpositionlist:" << modelpositionlist.size() << endl;
+		cout << "modelfacelist:" << modelfacelist.size() << endl;
+		cout << "tfacelist:" << tfacelist.size()<< endl;
+		cout << "facenormallist:" << facenormallist.size() << endl;
+		cout << "normalv0:" << normalv0.size() <<endl;
+		cout << "normalv1:" << normalv1.size() << endl;
+		cout << "normalv2:" << normalv2.size() << endl;
+		cout << "texturenamelist:" << texturenamelist.size() << endl;
+		cout << "ambientlist" << ambientlist.size() << endl;
+		cout << "diffuselist" << diffuselist.size() << endl;
+		cout << "shinninesslist" << shinninesslist.size() << endl;
+		cout << "shinistrengthlist" << shinistrengthlist.size() << endl;
+
+		//
+		m_mesh->mesh_matirialIDlist;
+		m_mesh->mesh_model_normallist;
+		m_mesh->mesh_model_positionlist;
+		m_mesh->mesh_normalist;
+		m_mesh->mesh_orth_z;
+		m_mesh->mesh_pointscolorlist;
+		m_mesh->mesh_positionlist;
+		m_mesh->mesh_texcoordlist;
+		m_mesh->mesh_triangleslist;
+		for (int materialIndex = 0; materialIndex < ambientlist.size(); materialIndex++){
+			LMaterial *materialtmp=new LMaterial();
+			materialtmp->ambient = ambientlist[materialIndex];
+			materialtmp->diffuse = diffuselist[materialIndex];
+			materialtmp->specular = specularlist[materialIndex];
+			materialtmp->shininess = shinninesslist[materialIndex];
+			m_materiallist.push_back(materialtmp);
+
+			LTexture* texture = new LTexture();
+
+			string texturepath = folderpath+ texturenamelist[materialIndex];
+			bool inittexsuccess = texture->initwithFile(texturepath);
+			assert(inittexsuccess);
+			m_texturelist.push_back(texture);
+		}
+
+		vector<int>temp_mesh_matirialIDlist;
+		temp_mesh_matirialIDlist.resize(modelpositionlist.size(), 0);
+
+		vector<LVector4> temp_mesh_model_normallist;
+		temp_mesh_model_normallist.resize(modelpositionlist.size());
+		vector<LVector4> temp_mesh_model_positionlist;
+		temp_mesh_model_positionlist.resize(modelpositionlist.size());
+		vector<LVector4> temp_mesh_normalist;
+		temp_mesh_normalist.resize(modelpositionlist.size());
+		vector<float> temp_mesh_orth_z;
+		temp_mesh_orth_z.resize(modelpositionlist.size());
+		vector<LVector4> temp_mesh_pointscolorlist;
+		temp_mesh_pointscolorlist.resize(modelpositionlist.size(), LVector4(1, 1, 1.0, 0));
+		vector<LVector2> temp_mesh_texcoordlist;
+		temp_mesh_texcoordlist.resize(modelpositionlist.size());
+
+		for (int trifaceIndex = 0; trifaceIndex < numfaces; trifaceIndex++){//??better?
+			int v0ID = modelfacelist[trifaceIndex].array[0];
+			int v1ID = modelfacelist[trifaceIndex].array[1];
+			int v2ID = modelfacelist[trifaceIndex].array[2];
+			temp_mesh_normalist[v0ID] = normalv0[trifaceIndex];
+			temp_mesh_normalist[v1ID] = normalv1[trifaceIndex];
+			temp_mesh_normalist[v2ID] = normalv2[trifaceIndex];
+
+			int tclistIndex0 = tfacelist[trifaceIndex].array[0];
+			int tclistIndex1 = tfacelist[trifaceIndex].array[1];
+			int tclistIndex2 = tfacelist[trifaceIndex].array[2];
+			temp_mesh_texcoordlist[v0ID] = texcoordlist[tclistIndex0];
+			temp_mesh_texcoordlist[v1ID] = texcoordlist[tclistIndex1];
+			temp_mesh_texcoordlist[v2ID] = texcoordlist[tclistIndex2];
+		}
+		m_mesh->mesh_positionlist = modelpositionlist;
+		m_mesh->mesh_triangleslist = modelfacelist;
+		m_mesh->mesh_matirialIDlist = temp_mesh_matirialIDlist;
+		m_mesh->mesh_normalist = temp_mesh_normalist;
+		m_mesh->mesh_texcoordlist = temp_mesh_texcoordlist;
+		m_mesh->mesh_model_normallist = temp_mesh_model_normallist;
+		m_mesh->mesh_model_positionlist=temp_mesh_model_positionlist;
+		m_mesh->mesh_orth_z=temp_mesh_orth_z;
+		m_mesh->mesh_pointscolorlist=temp_mesh_pointscolorlist;
 
 
 
