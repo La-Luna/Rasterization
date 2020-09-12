@@ -9,25 +9,25 @@ LunaCamera::LunaCamera(LunaProjectionMode mode){
 	m_fov = 45.0;
 	m_aspect = 1.0;
 	m_near = 0.1;
-	m_far = 250;
+	m_far = 100;
 
 
 	//keep rotate
 
 	
-	//LVector3 tempEyepos( 0, 0,10);
-	LVector3 tempEyepos( 100,0, 0);
+	LVector3 tempEyepos( 0, 0,10);
+	//LVector3 tempEyepos( 10,0, 0);
 	
 
-	//LVector3 tempU(1, 0, 0);
-	//LVector3 tempCentor(0, 0, 0);
-	//LVector3 tempV(0, 1, 0);
-	//LVector3 tempN(0, 0, 1);
-
-	LVector3 tempU(0, 0, -1);
+	LVector3 tempU(1, 0, 0);
 	LVector3 tempCentor(0, 0, 0);
 	LVector3 tempV(0, 1, 0);
-	LVector3 tempN(1, 0, 0);
+	LVector3 tempN(0, 0, 1);
+
+	//LVector3 tempU(0, 0, -1);
+	//LVector3 tempCentor(0, 0, 0);
+	//LVector3 tempV(0, 1, 0);
+	//LVector3 tempN(1, 0, 0);
 
 
 		m_eyePos = tempEyepos;
@@ -73,7 +73,7 @@ void LunaCamera::initProjectionMatrix(LunaProjectionMode mode){
 		float n = m_near*(-1);
 		float f = m_far*(-1);
 		float tan_fov_2 = tan((m_fov / 2.0)*(PI / 180));
-		//cout << tan_fov_2 << endl;
+		//cout << tan_fov_2 << endl; 
 		float t11 = 1 / (m_aspect*tan_fov_2);
 		float t22 = 1 / tan_fov_2;
 		float t33 = (f + n) / (n - f);

@@ -93,7 +93,7 @@ void LunaScene::init(LVector4 viewport){
 	//makeSimpleTriangle();
 	//makeSimpleCube();
 	//makeSimpleEarth();
-    makesimpleSceneTeapot();
+   makesimpleSceneTeapot();
 
 }
 void LunaScene::setLightPoswitheyepos(){
@@ -1273,7 +1273,7 @@ void LunaScene::loadASEmodels(const string& folderpath,const string& filename){
 			if (vertexPos3.array[0] > maxvertexpos)maxvertexpos =  vertexPos3.array[0];
 			if (vertexPos3.array[1] > maxvertexpos)maxvertexpos = vertexPos3.array[1];
 			if (vertexPos3.array[2] > maxvertexpos)maxvertexpos = vertexPos3.array[2];
-			LVector4 vertexPos = LVector4(vertexPos3.array[0], vertexPos3.array[1], vertexPos3.array[1], 1);
+			LVector4 vertexPos = LVector4(vertexPos3.array[0]/10, vertexPos3.array[1]/10, vertexPos3.array[1]/10, 1);
 			modelpositionlist.push_back(vertexPos);
 
 		}
